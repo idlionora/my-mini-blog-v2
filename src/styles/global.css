@@ -1,0 +1,9 @@
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Source Sans Pro', Arial, Helvetica, sans-serif;
+    font-weight: 400;
+}

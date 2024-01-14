@@ -1,0 +1,19 @@
+---
+import "../styles/fonts.css";
+import "../styles/global.css"
+
+import MainHead from "./MainHead.astro";
+
+interface Props {
+    title?: string;
+}
+
+const {title = "My Mini Blog"} = Astro.props as Props;
+---
+
+<html lang="en">
+	<MainHead {title}/>
+	<body>
+		<slot/>
+	</body>
+</html>
