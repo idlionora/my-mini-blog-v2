@@ -1,0 +1,28 @@
+---
+import type { InferGetStaticParamsType, InferGetStaticPropsType, GetStaticPaths } from "astro";
+import MainHead from "../layouts/MainHead.astro"
+import LoginSignup from "../components/LoginSignup"
+import ForgotPassword from "../components/ForgotPassword"
+
+export const getStaticPaths = (async () => {
+    const titleArr = ["Log In", "Sign Up", "Forgot Password"]
+    return titleArr.map((title) => { return {
+        params: { auth: title.replace(' ', '').toLowerCase() },
+        props: { title }
+    }})
+}) satisfies GetStaticPaths;
+
+type Params = InferGetStaticParamsType<typeof getStaticPaths>;
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+
+const { auth: slug } = Astro.params as Params;
+const { title } = Astro.props as Props;
+---
+
+<html lang="en">
+    <MainHead {title}/>
+    <body>
+        { slug === ("login" || "signup") && <LoginSignup compType={slug}/>}
+        { slug === "forgotpassword" && <ForgotPassword /> }
+    </body>
+</html>
