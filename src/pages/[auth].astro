@@ -1,13 +1,13 @@
 ---
 import type { InferGetStaticParamsType, InferGetStaticPropsType, GetStaticPaths } from "astro";
 
-import "../styles/global.css";
-import "../styles/auth.css";
+import "@styles/global.css";
+import "@styles/auth.css";
 
-import MainHead from "../layouts/MainHead.astro"
-import Login from "../components/Login"
-import Signup from "../components/Signup"
-import ForgotPassword from "../components/ForgotPassword"
+import MainHead from "@layouts/MainHead.astro"
+import Login from "@components/Login"
+import Signup from "@components/Signup"
+import ForgotPassword from "@components/ForgotPassword"
 
 export const getStaticPaths = (async () => {
     const titleArr = ["Log In", "Sign Up", "Forgot Password"]
