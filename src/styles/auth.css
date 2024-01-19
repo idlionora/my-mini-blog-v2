@@ -16,6 +16,15 @@
     }
 }
 
+.auth-title {
+    color: white;
+    font-family: Oxygen, Helvetica, sans-serif;
+    font-weight: 700;
+    line-height: 2rem;
+    font-size: 1.625rem;
+    margin-bottom: 1rem;    
+}
+
 .auth-label {
     display: block;
     font-size: 1.25rem;

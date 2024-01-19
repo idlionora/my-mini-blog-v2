@@ -27,11 +27,14 @@ const { title } = Astro.props as Props;
 
 <html lang="en">
     <MainHead {title}/>
-    <body>
-        <main class="bg-theme-blue sm:bg-neutral-00 w-full h-screen flex justify-center items-center sm:px-5">
-            { slug === ("login") && <Login client:load/> }
-            { slug === ("signup") && <Signup client:load/> }
-            { slug === "forgotpassword" && <ForgotPassword client:load/> }
+    <body class="bg-theme-blue sm:bg-neutral-00 w-full h-screen flex justify-center items-center sm:px-5">
+        <main class="auth-container">
+            <h2 class="auth-title">
+				{ slug === "login" ? "Log in to myMiniBlog" : slug === "signup" ? "Create an account" : "Reset Your Password"}
+			</h2>
+            { slug === "login" && <><Login client:only="react"/><p class="mt-6">Need an account? Sign up</p><p>Forgot your account? Reset it</p></> }
+            { slug === "signup" && <><Signup client:only="react"/><p class="mt-6">Already have an account? Sign in</p></>}
+            { slug === "forgotpassword" && <ForgotPassword client:only="react"/> }
         </main>
     </body>
 </html>
