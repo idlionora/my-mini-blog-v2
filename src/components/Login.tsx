@@ -13,14 +13,14 @@ const Login = () => {
 		setSubmittedForm({ email, password });
 		try {
 			setIsLoading(true);
-			let res = await axios.post(`${import.meta.env.PUBLIC_APISITE}/api/v1/users/login`, {
+			let res = await axios.post(`${import.meta.env.PUBLIC_APISITE}/users/login`, {
 				email,
 				password,
 			});
 			res = res.data;
-			console.log(res.status);
+
 			setIsLoading(false);
-			setLoginStatus('success');
+			setLoginStatus('');
 		} catch (error) {
 			const err = error as AxiosError;
 			setIsLoading(false);
