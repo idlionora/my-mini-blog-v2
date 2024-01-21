@@ -18,49 +18,52 @@ const Signup = () => {
 		event.preventDefault();
 		setIsLoading(true);
 		setSubmittedForm(formInput);
-		let recentError = ''
+		let recentError = '';
 
 		if (formInput.password !== formInput.passwordConfirm) {
-			recentError = 'diffPasswords'
+			recentError = 'diffPasswords';
 		}
 
 		if (formInput.password.length < 8) {
-			recentError = 'passLengthMin'
+			recentError = 'passLengthMin';
 		}
 
 		if (recentError.length > 0) {
-			setSignupStatus(recentError)
+			setSignupStatus(recentError);
 			setIsLoading(false);
-			return
+			return;
 		}
 
 		try {
 			let res = await axios.post(`${import.meta.env.PUBLIC_APISITE}/users/signup`, formInput);
 			res = res.data;
-			
+
 			setIsLoading(false);
 			setSignupStatus('success');
 		} catch (error) {
 			const err = error as AxiosError;
-			setIsLoading(false)
-			console.log(err)
-			if (err.response?.status === 400 && err.response?.data?.message.includes('Duplicate')) {
-				setSignupStatus('duplicateEmail')
-			} 
+			const errData = err.response?.data as { message: string; status: string };
+			setIsLoading(false);
+			if (err.response?.status === 400 && errData.message.includes('Duplicate')) {
+				setSignupStatus('duplicateEmail');
+			}
 		}
 	}
 
-	if (signupStatus === 'passLengthMin' && submittedForm.password !== formInput.password) setSignupStatus('');
+	if (signupStatus === 'passLengthMin' && submittedForm.password !== formInput.password)
+		setSignupStatus('');
 	if (signupStatus === 'diffPasswords' && formInput.passwordConfirm === formInput.password)
 		setSignupStatus('');
 	if (signupStatus === 'duplicateEmail' && submittedForm.email !== formInput.email)
 		setSignupStatus('');
-	console.log(signupStatus)
+
 	return (
 		<>
 			{signupStatus === 'success' && (
 				<div className="statusmsg success">
-					Account is successfully created.<br/>Please wait a moment...
+					Account is successfully created.
+					<br />
+					Please wait a moment...
 				</div>
 			)}
 			{signupStatus === 'duplicateEmail' && (
@@ -129,14 +132,12 @@ const Signup = () => {
 						setFormInput({ ...formInput, passwordConfirm: e.target.value })
 					}
 				/>
-				<div className="flex justify-start mt-3.5 relative">
-					<button
-						type="submit"
-						className={`auth-button ${isLoading ? 'auth-loading' : ''}`}
-					>
-						{isLoading ? 'Please wait...' : 'Sign up'}
-					</button>
-				</div>
+				<button
+					type="submit"
+					className={`auth-button mt-3.5 ${isLoading ? 'auth-loading' : ''}`}
+				>
+					{isLoading ? 'Please wait...' : 'Sign up'}
+				</button>
 			</form>
 		</>
 	);

@@ -85,3 +85,12 @@ body {
     font-family: 'Source Sans Pro', Arial, Helvetica, sans-serif;
     font-weight: 400;
 }
+
+.text-link {
+  text-decoration: underline;
+  color: #1d4ed8; /*text-blue-700*/
+}
+
+.text-link:hover{
+  color: #9333ea; /*text-purple-600*/
+}
