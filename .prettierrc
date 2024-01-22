@@ -1,0 +1,14 @@
+{
+	"useTabs": true,
+	"singleQuote": true,
+	"trailingComma": "es5",
+	"semi": true,
+	"printWidth": 100,
+	"arrowParens": "always",
+	"bracketSpacing": true,
+	"jsxBracketSameLine": false,
+	"jsxSingleQuote": false,
+	"tabWidth": 4,
+	"plugins": ["prettier-plugin-astro"],
+	"pluginSearchDirs": false
+}
