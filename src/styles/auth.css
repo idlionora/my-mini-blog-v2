@@ -46,6 +46,19 @@
     margin-bottom: 1rem;
 }
 
+.auth-input:focus {
+    outline-color: #1e40af;
+}
+
+.auth-input.fail {
+    border-width: 2px;
+    border-color: #fb7185;
+}
+
+.auth-input.fail:focus {
+    outline-color: #f43f5e;
+}
+
 .statusmsg {
     width: 100%;
     border-radius: 0.5rem;

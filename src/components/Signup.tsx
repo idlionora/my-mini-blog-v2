@@ -1,5 +1,6 @@
-import axios, { AxiosError } from 'axios';
 import { useState } from 'react';
+import axios, { AxiosError, type AxiosResponse } from 'axios';
+import setUserToLocalStorage from '@scripts/setUserToLocalStorage';
 
 const emptyForm = {
 	name: '',
@@ -18,25 +19,19 @@ const Signup = () => {
 		event.preventDefault();
 		setIsLoading(true);
 		setSubmittedForm(formInput);
-		let recentError = '';
 
 		if (formInput.password !== formInput.passwordConfirm) {
-			recentError = 'diffPasswords';
-		}
-
-		if (formInput.password.length < 8) {
-			recentError = 'passLengthMin';
-		}
-
-		if (recentError.length > 0) {
-			setSignupStatus(recentError);
+			setSignupStatus('diffPasswords');
 			setIsLoading(false);
 			return;
 		}
 
 		try {
-			let res = await axios.post(`${import.meta.env.PUBLIC_APISITE}/users/signup`, formInput);
-			res = res.data;
+			const res = (await axios.post(
+				`${import.meta.env.PUBLIC_APISITE}/users/signup`,
+				formInput
+			)) as AxiosResponse;
+			setUserToLocalStorage(res);
 
 			setIsLoading(false);
 			setSignupStatus('success');
@@ -50,8 +45,6 @@ const Signup = () => {
 		}
 	}
 
-	if (signupStatus === 'passLengthMin' && submittedForm.password !== formInput.password)
-		setSignupStatus('');
 	if (signupStatus === 'diffPasswords' && formInput.passwordConfirm === formInput.password)
 		setSignupStatus('');
 	if (signupStatus === 'duplicateEmail' && submittedForm.email !== formInput.email)
@@ -71,11 +64,6 @@ const Signup = () => {
 					This email has already been registered.
 					<br />
 					Please log in!
-				</div>
-			)}
-			{signupStatus === 'passLengthMin' && (
-				<div className="statusmsg fail">
-					Please provide a password longer than 7 characters.
 				</div>
 			)}
 			{signupStatus === 'diffPasswords' && (
@@ -101,7 +89,7 @@ const Signup = () => {
 					type="email"
 					name="email"
 					id="email"
-					className={`auth-input ${signupStatus === 'duplicateEmail' ? 'border-2 border-rose-400 focus:outline-rose-500' : 'focus:outline-blue-800'}`}
+					className={`auth-input ${signupStatus === 'duplicateEmail' ? 'fail' : ''}`}
 					placeholder="johndoe@email.com"
 					required
 					onChange={(e) => setFormInput({ ...formInput, email: e.target.value })}
@@ -113,9 +101,10 @@ const Signup = () => {
 					type="password"
 					name="password"
 					id="password"
-					className={`auth-input ${signupStatus === 'diffPasswords' || signupStatus === 'passLengthMin' ? 'border-2 border-rose-400 focus:outline-rose-500' : 'focus:outline-blue-800'}`}
+					className={`auth-input ${signupStatus === 'diffPasswords' ? 'fail' : ''}`}
 					placeholder="********"
 					required
+					minLength={8}
 					onChange={(e) => setFormInput({ ...formInput, password: e.target.value })}
 				/>
 				<label htmlFor="passwordConfirm" className="auth-label">
@@ -125,9 +114,10 @@ const Signup = () => {
 					type="password"
 					name="passwordConfirm"
 					id="passwordConfirm"
-					className={`auth-input ${signupStatus === 'diffPasswords' ? 'border-2 border-rose-400 focus:outline-rose-500' : 'focus:outline-blue-800'}`}
+					className={`auth-input ${signupStatus === 'diffPasswords' ? 'fail' : ''}`}
 					placeholder="********"
 					required
+					minLength={8}
 					onChange={(e) =>
 						setFormInput({ ...formInput, passwordConfirm: e.target.value })
 					}
