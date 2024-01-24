@@ -2,7 +2,7 @@ import type { AxiosResponse } from "axios";
 
 export function setUserToLocalStorage (res:AxiosResponse) {
     const resData = res.data as {
-		data: {user: object};
+		data: { user: object };
 		token: string;
 	};
 	const userData = resData.data.user as { _id: string; name: string; photo: string };
