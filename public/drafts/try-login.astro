@@ -1,4 +1,4 @@
----
+<!-- ---
 import axios, { AxiosError, type AxiosResponse } from 'axios';
 
 import "@styles/global.css";
@@ -8,14 +8,19 @@ import MainHead from "@layouts/MainHead.astro"
 
 let loginStatus = '';
 let formValues = {email: '', password: ''}
-let formResponse: AxiosResponse
+let formResponse: string
 
 if (Astro.request.method === 'POST') {
     try {
         const data = await Astro.request.formData();
         formValues = {email: data.get("email") as string, password: data.get("password") as string}
-        let res = (await axios.post(`${import.meta.env.PUBLIC_APISITE}/users/login`, formValues)) as AxiosResponse;
-		formResponse = res
+        const res = (await axios.post(`${import.meta.env.PUBLIC_APISITE}/users/login`, formValues)) as AxiosResponse;
+        const resData = res.data as {
+		    data: { user: object };
+		    token: string;
+	    };
+        const userData = resData.data.user as { _id: string; name: string; photo: string };
+		formResponse = JSON.stringify({token: resData.token, id: userData._id, name: userData.name, photo: userData.photo})
     } catch (error) {
         const err = error as AxiosError;
 
@@ -95,22 +100,20 @@ if (Astro.request.method === 'POST') {
             }
             emailInput.addEventListener('change', changeForm);
             passwordInput.addEventListener('change', changeForm);
-            console.log(loginButton.dataset.response)
 
             //save response to localStorage
-            // if (loginButton.dataset.response) {
-            //     const resData = loginButton.dataset.response.data;
-            //     const userData = resData.data.user;
-                
-            //     const userJWT = {
-	        // 	    value: resData.token,
-		    //         expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-	        //     };
-            //     const userInfo = { id: userData._id, name: userData.name, photo: userData.photo };
-            //     localStorage.setItem('user_jwt', JSON.stringify(userJWT));
-	        //     localStorage.setItem('user_info', JSON.stringify(userInfo));
-            // }
-
+            if (loginButton.dataset.response) {
+                const response = JSON.parse(loginButton.dataset.response);
+                const userJWT = {
+                    value: response.token,
+                    expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+                }
+                const userInfo = {id: response.id, name: response.name, photo: response.photo}
+                localStorage.setItem('user_jwt', JSON.stringify(userJWT));
+	            localStorage.setItem('user_info', JSON.stringify(userInfo));
+                console.log(userJWT)
+                console.log(userInfo)
+            }
         </script>
     </body>
-</html>
+</html> -->

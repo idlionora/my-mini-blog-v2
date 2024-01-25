@@ -2,6 +2,7 @@
 import "@styles/global.css";
 
 import MainHead from "./MainHead.astro";
+import NavigationBar from "@components/NavigationBar";
 
 interface Props {
     title?: string;
@@ -12,7 +13,8 @@ const {title = "My Mini Blog"} = Astro.props as Props;
 
 <html lang="en">
 	<MainHead {title}/>
-	<body>
+	<body class="bg-neutral-00">
+		<NavigationBar client:only="react"/>
 		<slot/>
 	</body>
 </html>

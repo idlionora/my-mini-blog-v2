@@ -94,3 +94,19 @@ body {
 .text-link:hover{
   color: #9333ea; /*text-purple-600*/
 }
+
+.nav-link {
+  margin-left: 1rem;
+  cursor: pointer;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  
+}
+
+.nav-link:hover {
+  text-decoration-line: underline;
+}
+
+.nav-link:active {
+  text-decoration-line: underline;
+}
