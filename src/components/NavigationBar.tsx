@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 interface LocalUserObj {
 	id: string;
@@ -26,10 +26,11 @@ const emptyUser = { id: '', name: '', photo: '' };
 
 const NavigationBar = () => {
 	const pathname = window.location.pathname;
+	const navbarRef = useRef<HTMLElement>(null);
 	const userMenuRef = useRef<HTMLDivElement>(null);
 	const mobileMenuRef = useRef<HTMLDivElement>(null);
 	const [userInfo, setUserInfo] = useState(setLocalUser() || emptyUser);
-	const [activeDropdown, setActiveDropdown] = useState('userMenu');
+	const [activeDropdown, setActiveDropdown] = useState('');
 
 	function toggleDropdown(menu:string) {
 		if (activeDropdown !== menu) {
@@ -39,9 +40,36 @@ const NavigationBar = () => {
 		}
 	}
 
+	useEffect(() => {
+		document.addEventListener('mousedown', closeDropdown);
+		
+		return () => {
+			document.removeEventListener('mousedown', closeDropdown)
+		};
+	}, [activeDropdown])
+
+	function closeDropdown(event: MouseEvent) {
+		const clickTarget = event.target as Node;
+		const dropdownRefs = [{ref: userMenuRef, activeLabel: 'userMenu'}, {ref: mobileMenuRef, activeLabel: 'mobileMenu'}]
+
+		function deactivateDropdownByClick(ref: React.RefObject<HTMLDivElement>, activeLabel: string) {
+			if (activeDropdown !== activeLabel || navbarRef.current?.contains(clickTarget)) {
+				return
+			}
+			if (!ref.current?.contains(clickTarget)) {
+				setActiveDropdown('')
+			}
+		}
+		dropdownRefs.forEach(({ref, activeLabel}) => deactivateDropdownByClick(ref, activeLabel))
+	}
+
+
 	return (
 		<>
-			<nav className="w-screen h-14 px-4 sm:px-5 flex justify-center absolute left-0 top-0 bg-theme-purple z-[18]">
+			<nav
+				ref={navbarRef}
+				className="w-screen h-14 px-4 sm:px-5 flex justify-center absolute left-0 top-0 bg-theme-purple z-[18]"
+			>
 				<div className="w-full max-w-screen-xl h-full flex justify-between items-center relative">
 					<div id="nav-section-1" className="w-fit h-full relative">
 						<div className="w-fit h-full min-w-[12rem] flex items-center bg-theme-purple z-20 relative">
@@ -114,6 +142,7 @@ const NavigationBar = () => {
 				</div>
 			</nav>
 			<div
+				ref={mobileMenuRef}
 				className={`absolute right-0 bg-neutral-01 h-dvh w-full max-w-56 z-[17] border-l border-violet-300 transition-all duration-300 ease-in-out sm:hidden ${activeDropdown === 'mobileMenu' ? '' : 'translate-x-[100%]'}`}
 			></div>
 		</>
