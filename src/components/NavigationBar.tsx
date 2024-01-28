@@ -40,6 +40,13 @@ const NavigationBar = () => {
 		}
 	}
 
+	function logout() {
+		setActiveDropdown('');
+		localStorage.removeItem('user_info');
+		localStorage.removeItem('user_jwt');
+		setUserInfo(emptyUser)
+	}
+
 	useEffect(() => {
 		document.addEventListener('mousedown', closeDropdown);
 		
@@ -85,7 +92,7 @@ const NavigationBar = () => {
 							</div>
 							<button
 								id="nav-user-menu"
-								className={`pl-2 flex items-center min-w-[9.5rem] relative ${!userInfo.id ? 'cursor-default' : ''}`}
+								className={`pl-2 flex items-center min-w-[9.5rem] relative cursor-default ${userInfo.id ? 'sm:cursor-pointer' : ''}`}
 								onClick={() => toggleDropdown('userMenu')}
 							>
 								<div className="pr-6">Welcome, {userInfo.name || 'Guest'}!</div>
@@ -98,9 +105,26 @@ const NavigationBar = () => {
 						</div>
 						<div
 							ref={userMenuRef}
-							className={`hidden sm:block absolute left-0 bottom-0 bg-white w-full border-x border-b border-violet-400 rounded-b-lg overflow-hidden transition-all duration-250 ease-in-out z-[19] ${activeDropdown === 'userMenu' ? 'translate-y-[100%]' : ''}`}
+							className={`hidden ${userInfo.id ? 'sm:block ' : ''}absolute left-0 bottom-0 bg-white w-full border-x border-b border-violet-400 rounded-b-lg overflow-hidden transition-all duration-250 ease-in-out z-[19] ${activeDropdown === 'userMenu' ? 'translate-y-[100%]' : ''}`}
 						>
-							fdsknfsk
+							{userInfo.id ? (
+								<>
+									<a
+										href="/profile"
+										className={`button-usermenu ${activeDropdown !== 'userMenu' ? 'disabled' : ''}`}
+									>
+										Edit Profile
+									</a>
+									<button
+										className={`button-usermenu ${activeDropdown !== 'userMenu' ? 'disabled' : ''}`}
+										onClick={() => logout()}
+									>
+										Log Out
+									</button>
+								</>
+							) : (
+								''
+							)}
 						</div>
 					</div>
 					<ul className="h-full flex items-center whitespace-nowrap">
@@ -143,8 +167,34 @@ const NavigationBar = () => {
 			</nav>
 			<div
 				ref={mobileMenuRef}
-				className={`absolute right-0 bg-neutral-01 h-dvh w-full max-w-56 z-[17] border-l border-violet-300 transition-all duration-300 ease-in-out sm:hidden ${activeDropdown === 'mobileMenu' ? '' : 'translate-x-[100%]'}`}
-			></div>
+				className={`absolute right-0 bg-neutral-01 h-dvh w-full max-w-40 flex flex-col gap-3 z-[17] pt-16 px-1 border-l border-violet-300 transition-all duration-300 ease-in-out sm:hidden ${activeDropdown === 'mobileMenu' ? '' : 'translate-x-[100%]'}`}
+			>
+				{pathname.length > 1 && (
+					<a href="/" className="button-mobilemenu">
+						Home
+					</a>
+				)}
+				<a href="/about" className="button-mobilemenu">
+					About
+				</a>
+				{pathname !== '/manage-posts' && userInfo.id && (
+					<a href="/manage-posts" className="button-mobilemenu">
+						Manage Posts
+					</a>
+				)}
+				{userInfo.id ? (
+					<>
+						<a href="/profile" className="button-mobilemenu">
+							Edit Profile
+						</a>
+						<button className="button-mobilemenu text-start" onClick={() => logout()}>Log Out</button>
+					</>
+				) : (
+					<a href="/login" className="button-mobilemenu">
+						Log In
+					</a>
+				)}
+			</div>
 		</>
 	);
 };
