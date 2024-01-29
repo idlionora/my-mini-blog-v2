@@ -24,7 +24,7 @@ function setLocalUser() {
 
 const emptyUser = { id: '', name: '', photo: '' };
 
-const NavigationBar = () => {
+const Navbar = () => {
 	const pathname = window.location.pathname;
 	const navbarRef = useRef<HTMLElement>(null);
 	const userMenuRef = useRef<HTMLDivElement>(null);
@@ -105,20 +105,14 @@ const NavigationBar = () => {
 						</div>
 						<div
 							ref={userMenuRef}
-							className={`hidden ${userInfo.id ? 'sm:block ' : ''}absolute left-0 bottom-0 bg-white w-full border-x border-b border-violet-400 rounded-b-lg overflow-hidden transition-all duration-250 ease-in-out z-[19] ${activeDropdown === 'userMenu' ? 'translate-y-[100%]' : ''}`}
+							className={`hidden ${userInfo.id ? 'sm:block ' : ''}absolute left-0 bottom-0 bg-white w-full border-x border-b border-violet-400 rounded-b-lg overflow-hidden transition-all duration-250 ease-in-out z-[19] ${activeDropdown === 'userMenu' ? 'translate-y-[100%]' : 'menu-disabled'}`}
 						>
 							{userInfo.id ? (
 								<>
-									<a
-										href="/profile"
-										className={`button-usermenu ${activeDropdown !== 'userMenu' ? 'disabled' : ''}`}
-									>
+									<a href="/profile" className="button-usermenu">
 										Edit Profile
 									</a>
-									<button
-										className={`button-usermenu ${activeDropdown !== 'userMenu' ? 'disabled' : ''}`}
-										onClick={() => logout()}
-									>
+									<button className="button-usermenu" onClick={() => logout()}>
 										Log Out
 									</button>
 								</>
@@ -127,29 +121,29 @@ const NavigationBar = () => {
 							)}
 						</div>
 					</div>
-					<ul className="h-full flex items-center whitespace-nowrap">
+					<ul className="h-full hidden sm:flex items-center whitespace-nowrap">
 						{pathname.length > 1 && (
 							<li>
-								<a href="/" className="nav-link hidden sm:block">
+								<a href="/" className="nav-link">
 									Home
 								</a>
 							</li>
 						)}
 						<li>
-							<a href="/about" className="nav-link hidden sm:block">
+							<a href="/about" className="nav-link">
 								About
 							</a>
 						</li>
 						{pathname !== '/manage-posts' && userInfo.id && (
 							<li>
-								<a href="/manage-posts" className="nav-link hidden sm:block">
+								<a href="/manage-posts" className="nav-link">
 									Manage Posts
 								</a>
 							</li>
 						)}
 						{!userInfo.id && (
 							<li>
-								<a href="/login" className="nav-link hidden sm:block">
+								<a href="/login" className="nav-link">
 									Log In
 								</a>
 							</li>
@@ -187,7 +181,9 @@ const NavigationBar = () => {
 						<a href="/profile" className="button-mobilemenu">
 							Edit Profile
 						</a>
-						<button className="button-mobilemenu text-start" onClick={() => logout()}>Log Out</button>
+						<button className="button-mobilemenu text-start" onClick={() => logout()}>
+							Log Out
+						</button>
 					</>
 				) : (
 					<a href="/login" className="button-mobilemenu">
@@ -199,4 +195,4 @@ const NavigationBar = () => {
 	);
 };
 
-export default NavigationBar;
+export default Navbar;
