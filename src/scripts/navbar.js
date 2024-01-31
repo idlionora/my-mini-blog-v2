@@ -1,4 +1,3 @@
-
 const userMenuButton = document.getElementById('nav-usermenu-button');
 const userMenuArrow = document.getElementById('nav-usermenu-arrow');
 const userMenu = document.getElementById('nav-usermenu');
@@ -17,40 +16,75 @@ const mobileMenuLogin = document.getElementById('nav-mobilemenu-login');
 const userPhoto = document.getElementById('userinfo-photo');
 const userName = document.getElementById('userinfo-name');
 
-
 // DROPDOWN BUTTON FUNCTIONS //
 let isUserMenuActive = false;
 let isMobileMenuActive = false;
 
+function clickOutsideUserMenu(event) {
+	if (userMenuButton.contains(event.target) || userMenu.contains(event.target)) {
+		return;
+	}
+	closeUserMenu()
+}
+
+function openUserMenu() {
+	userMenuArrow.classList.add('rotate-halfcircle');
+	userMenu.classList.add('slide-down-full');
+	userMenu.classList.remove('menu-disabled');
+	isUserMenuActive = true;
+	document.addEventListener('click', (e) => clickOutsideUserMenu(e));
+}
+
+function closeUserMenu() {
+	userMenuArrow.classList.remove('rotate-halfcircle');
+	userMenu.classList.remove('slide-down-full');
+	userMenu.classList.add('menu-disabled');
+	isUserMenuActive = false;
+	document.removeEventListener('click', (e) => clickOutsideUserMenu(e));
+}
+
 const toggleUserMenu = () => {
-    if (!isUserMenuActive) {
-        userMenuArrow.classList.add('rotate-halfcircle');
-        userMenu.classList.add('slide-down-full');
-        userMenu.classList.remove('menu-disabled');
-        isUserMenuActive = true;
-    } else {
-        userMenuArrow.classList.remove('rotate-halfcircle');
-		userMenu.classList.remove('slide-down-full');
-		userMenu.classList.add('menu-disabled');
-        isUserMenuActive = false;
-    }
+	if (!isUserMenuActive) {
+		openUserMenu();
+	} else {
+        closeUserMenu()
+	}
+};
+
+function clickOutsideMobileMenu(event) {
+    if (mobileMenuButton.contains(event.target) || mobileMenu.contains(event.target)) {
+		return;
+	}
+	closeMobileMenu()
+}
+
+function openMobileMenu() {
+	mobileMenuButton.classList.add('shadow-whiteglow');
+	mobileMenu.classList.replace('hidden', 'flex');
+	setTimeout(() => {
+		mobileMenu.classList.remove('slide-right-full');
+	}, 10);
+	isMobileMenuActive = true;
+	document.addEventListener('click', (e) => clickOutsideMobileMenu(e));
+}
+
+function closeMobileMenu() {
+	mobileMenuButton.classList.remove('shadow-whiteglow');
+	mobileMenu.classList.add('slide-right-full');
+	setTimeout(() => {
+		mobileMenu.classList.replace('flex', 'hidden');
+	}, 310);
+	isMobileMenuActive = false;
+	document.removeEventListener('click', (e) => clickOutsideMobileMenu(e));
 }
 
 const toggleMobileMenu = () => {
-    console.log(mobileMenu.classList.value)
-    if (!isMobileMenuActive) {
-        mobileMenuButton.classList.add('shadow-whiteglow');
-        mobileMenu.classList.replace('hidden', 'flex');
-        setTimeout(() => {mobileMenu.classList.remove('slide-right-full')}, 10);
-		isMobileMenuActive = true;
-        
-    } else {
-        mobileMenuButton.classList.remove('shadow-whiteglow');
-        mobileMenu.classList.add('slide-right-full')
-        setTimeout(() => {mobileMenu.classList.replace('flex', 'hidden');}, 310)
-        isMobileMenuActive = false;
-    }
-}
+	if (!isMobileMenuActive) {
+		openMobileMenu()
+	} else {
+		closeMobileMenu();		
+	}
+};
 
 // LOGOUT FUNCTIONS //
 function setNavbarLogout() {
@@ -66,9 +100,9 @@ function setNavbarLogout() {
 	mobileMenuLogout.classList.add('hidden');
 	navLinksLogin.classList.remove('hidden');
 
-    userMenuLogout.removeEventListener('click', logout);
+	userMenuLogout.removeEventListener('click', logout);
 	mobileMenuLogout.removeEventListener('click', logout);
-    userMenuButton.removeEventListener('click', toggleUserMenu);
+	userMenuButton.removeEventListener('click', toggleUserMenu);
 }
 
 const logout = () => {
@@ -77,68 +111,66 @@ const logout = () => {
 	userName.innerHTML = 'Guest';
 	userPhoto.src = '/images/noun-user-1256674-profile.png';
 	setNavbarLogout();
-}
+};
 
 // READ LOCALSTORAGE AND LOGIN //
-function appendUserInfo({name, photo}) {
-    userName.innerHTML = name;
+function appendUserInfo({ name, photo }) {
+	userName.innerHTML = name;
 
-    if (photo[1] ==='v') {
-        userPhoto.src = `${import.meta.env.PUBLIC_IMG_HOST}${photo}`;
-    } else {
-        userPhoto.src = photo;
-    }
-    
+	if (photo[1] === 'v') {
+		userPhoto.src = `${import.meta.env.PUBLIC_IMG_HOST}${photo}`;
+	} else {
+		userPhoto.src = photo;
+	}
 }
 
 function setNavbarLogin() {
-    userMenuButton.classList.add('sm-cursor-pointer');
-    userMenuArrow.classList.add('sm-block');
-    userMenu.classList.add('sm-block');
+	userMenuButton.classList.add('sm-cursor-pointer');
+	userMenuArrow.classList.add('sm-block');
+	userMenu.classList.add('sm-block');
 
-    if (navLinksPosts) navLinksPosts.classList.remove('hidden');
-    navLinksLogin.classList.add('hidden');
+	if (navLinksPosts) navLinksPosts.classList.remove('hidden');
+	navLinksLogin.classList.add('hidden');
 
-    if (mobileMenuPosts) mobileMenuPosts.classList.remove('hidden');
-    mobileMenuProfile.classList.remove('hidden');
-    console.log(mobileMenuLogout.classList.value)
-    mobileMenuLogout.classList.remove('hidden');
-    navLinksLogin.classList.add('hidden') 
-    
-    userMenuLogout.addEventListener('click', logout);
-    mobileMenuLogout.addEventListener('click', logout);
-    userMenuButton.addEventListener('click', toggleUserMenu);
+	if (mobileMenuPosts) mobileMenuPosts.classList.remove('hidden');
+	mobileMenuProfile.classList.remove('hidden');
+	mobileMenuLogout.classList.remove('hidden');
+	mobileMenuLogin.classList.add('hidden');
+
+	userMenuLogout.addEventListener('click', logout);
+	mobileMenuLogout.addEventListener('click', logout);
+	userMenuButton.addEventListener('click', toggleUserMenu);
 }
 
 const readUserInfo = () => {
-    // check for token's expiration date
-    let userJWT = localStorage.getItem('user_jwt');
-    if (!userJWT) {
-        return
-    }
-    userJWT = JSON.parse(userJWT);
+	// check for token's expiration date
+	let userJWT = localStorage.getItem('user_jwt');
+	if (!userJWT) {
+		return;
+	}
+	userJWT = JSON.parse(userJWT);
 	const dateExp = new Date(userJWT.expires);
 
-    // delete user's data from localStorage if expired
+	// delete user's data from localStorage if expired
 	if (Date.now() > dateExp) {
-        localStorage.removeItem('user_jwt');
-        localStorage.removeItem('user_info');
-        return        
-    }
+		localStorage.removeItem('user_jwt');
+		localStorage.removeItem('user_info');
+		return;
+	}
 
-    // set current user as logged in
-    let userInfo = localStorage.getItem('user_info');
-    if (!userInfo) {
-        return
-    }
-    userInfo = JSON.parse(userInfo);
-    appendUserInfo(userInfo)
-    setNavbarLogin()    
-}
+	// set current user as logged in
+	let userInfo = localStorage.getItem('user_info');
+	if (!userInfo) {
+		return;
+	}
+	userInfo = JSON.parse(userInfo);
+	appendUserInfo(userInfo);
+	setNavbarLogin();
+};
 
 const navbarInit = () => {
-    readUserInfo();
-    mobileMenuButton.addEventListener('click', toggleMobileMenu)
-}
+	readUserInfo();
+	mobileMenuButton.addEventListener('click', toggleMobileMenu);
+};
 
-navbarInit()
+navbarInit();
