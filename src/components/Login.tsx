@@ -1,5 +1,6 @@
-import axios, { AxiosError } from 'axios';
 import { useState } from 'react';
+import axios, { AxiosError, type AxiosResponse } from 'axios';
+import setUserToLocalStorage from '@scripts/setUserToLocalStorage';
 
 const Login = () => {
 	const [email, setEmail] = useState('');
@@ -13,11 +14,11 @@ const Login = () => {
 		setSubmittedForm({ email, password });
 		try {
 			setIsLoading(true);
-			let res = await axios.post(`${import.meta.env.PUBLIC_APISITE}/users/login`, {
+			let res = (await axios.post(`${import.meta.env.PUBLIC_APISITE}/users/login`, {
 				email,
 				password,
-			});
-			res = res.data;
+			})) as AxiosResponse;
+			setUserToLocalStorage(res);
 
 			setIsLoading(false);
 			setLoginStatus('');
@@ -50,7 +51,7 @@ const Login = () => {
 					id="email"
 					type="email"
 					name="email"
-					className={`auth-input ${loginStatus === 'incorrectFill' ? 'border-2 border-rose-400 focus:outline-rose-500' : 'focus:outline-blue-800'}`}
+					className={`auth-input ${loginStatus === 'incorrectFill' ? 'fail' : ''}`}
 					placeholder="user@email.com"
 					required
 					onChange={(e) => setEmail(e.target.value)}
@@ -62,9 +63,10 @@ const Login = () => {
 					id="password"
 					type="password"
 					name="password"
-					className={`auth-input ${loginStatus === 'incorrectFill' ? 'border-2 border-rose-400 focus:outline-rose-500' : 'focus:outline-blue-800'}`}
+					className={`auth-input ${loginStatus === 'incorrectFill' ? 'fail' : ''}`}
 					placeholder="********"
 					required
+					minLength={8}
 					onChange={(e) => setPassword(e.target.value)}
 				/>
 				<div className="flex justify-center mt-3.5 relative">

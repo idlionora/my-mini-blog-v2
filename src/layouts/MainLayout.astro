@@ -1,7 +1,9 @@
 ---
 import "@styles/global.css";
+import "@styles/navbar.css";
 
-import MainHead from "./MainHead.astro";
+import MainHead from "@layouts/MainHead.astro";
+import NavigationBar from "@components/NavigationBar.astro";
 
 interface Props {
     title?: string;
@@ -12,7 +14,10 @@ const {title = "My Mini Blog"} = Astro.props as Props;
 
 <html lang="en">
 	<MainHead {title}/>
-	<body>
+	<body class="bg-neutral-00 relative w-screen min-h-dvh overflow-hidden">
+		<NavigationBar />
 		<slot/>
+		<script src="../scripts/navbar.js"></script>
 	</body>
 </html>
+

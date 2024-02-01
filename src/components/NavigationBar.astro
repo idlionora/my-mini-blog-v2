@@ -1,0 +1,63 @@
+---
+
+const currentPath = Astro.url.pathname;
+---
+
+<nav id="nav-container" class="w-screen h-14 px-4 sm:px-5 flex justify-center left-0 top-0 bg-theme-purple z-[18]">
+    <div class="w-full max-w-screen-xl h-full flex justify-between items-center relative">
+        <section class="w-fit h-full relative">
+            <div id="userinfo-container" class="w-fit h-full min-w-[12rem] flex items-center bg-theme-purple z-20 relative">
+                <div class="w-10 h-10 bg-white rounded-full shrink-0 overflow-hidden flex justify-center items-center">
+                    <img id="userinfo-photo" src="/images/noun-user-1256674-profile.png" alt="User's photo" class="w-11 h-11 object-cover object-center">
+                </div>
+                <button id="nav-usermenu-button" class="pl-2 flex items-center min-w-[9.5rem] relative cursor-default">
+                    <p class="pr-6">Welcome, <span id="userinfo-name">Guest</span>!</p>
+                    <img id="nav-usermenu-arrow" src="/icons/chevron-down.svg" alt="" class="w-4 h-fit absolute right-0 transition-all duration-300 ease-in-out hidden">
+                </button>
+            </div>
+            <div id="nav-usermenu" class="hidden absolute left-0 bottom-0 bg-white w-full border-x border-b border-violet-400 rounded-b-lg overflow-hidden transition-all duration-300 ease-in-out z-[19] menu-disabled">
+                <a href="/profile" class="button-usermenu">Edit Profile</a>
+                <button id="nav-usermenu-logout" class="button-usermenu">Log Out</button>
+            </div>
+        </section>
+        <section>
+            <ul id="nav-links-container" class="h-full hidden sm:flex items-center whitespace-nowrap">
+                {currentPath.length > 1 && (
+                    <li>
+                        <a href="/" class="nav-link">Home</a>
+                    </li>
+                )}
+                {currentPath !== "/about" && (
+                    <li>
+                        <a href="/about" class="nav-link">About</a>
+                    </li>
+                )}
+                {currentPath !== "/manage-posts" && (
+                    <li>
+                        <a id="nav-links-posts" href="/manage-posts" class="nav-link hidden">Manage Posts</a>
+                    </li>
+                )}
+                <li>
+                    <a id="nav-links-login" href="/login" class="nav-link">Log In</a>
+                </li>
+            </ul>
+            <button id="nav-mobilemenu-button" class="border rounded border-violet-500 sm:hidden shadow-base" aria-label="Main menu">
+                <img src="/icons/hamburger-menu.svg" alt="" class="w-5 h-5 m-1" />
+            </button>
+        </section>
+    </div>
+</nav>
+<div id="nav-mobilemenu" class="absolute right-0 bg-neutral-01 h-dvh w-full max-w-40 flex-col gap-3 z-[17] pt-2 px-1 border-l border-violet-300 transition-all duration-300 ease-in-out hidden sm:hidden slide-right-full">
+    {currentPath.length > 1 && (
+        <a href="/" class="button-mobilemenu">Home</a>
+    )}
+    {currentPath !== "/about" && (
+        <a href="/about" class="button-mobilemenu">About</a>
+    )}
+    {currentPath !== "/manage-posts" && (
+        <a id="nav-mobilemenu-posts" href="/manage-posts" class="button-mobilemenu hidden">Manage Posts</a>
+    )}
+    <a id="nav-mobilemenu-profile" href="/profile" class="button-mobilemenu hidden">Edit Profile</a>
+    <button id="nav-mobilemenu-logout" class="button-mobilemenu text-start hidden">Log Out</button>
+    <a id="nav-mobilemenu-login" href="/login" class="button-mobilemenu">Log In</a>
+</div>

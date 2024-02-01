@@ -1,0 +1,119 @@
+<!-- ---
+import axios, { AxiosError, type AxiosResponse } from 'axios';
+
+import "@styles/global.css";
+import "@styles/auth.css";
+
+import MainHead from "@layouts/MainHead.astro"
+
+let loginStatus = '';
+let formValues = {email: '', password: ''}
+let formResponse: string
+
+if (Astro.request.method === 'POST') {
+    try {
+        const data = await Astro.request.formData();
+        formValues = {email: data.get("email") as string, password: data.get("password") as string}
+        const res = (await axios.post(`${import.meta.env.PUBLIC_APISITE}/users/login`, formValues)) as AxiosResponse;
+        const resData = res.data as {
+		    data: { user: object };
+		    token: string;
+	    };
+        const userData = resData.data.user as { _id: string; name: string; photo: string };
+		formResponse = JSON.stringify({token: resData.token, id: userData._id, name: userData.name, photo: userData.photo})
+    } catch (error) {
+        const err = error as AxiosError;
+
+        if (err.response?.status === 401) {
+			loginStatus = 'incorrectFill'
+		} else if (error instanceof Error) {
+            console.error(error.message)
+        }
+    }
+}
+---
+
+<html lang="en">
+    <MainHead title="TEST PAGE"/>
+    <body class="bg-theme-blue sm:bg-neutral-00 w-full h-screen flex justify-center items-center sm:px-5">
+        <main class="auth-container">
+            <h2 class="auth-title">Log in to myMiniBlog</h2>
+            <div id="res-msg" class={loginStatus === 'incorrectFill' ? "statusmsg fail incorrectFill" : ''}>{loginStatus === 'incorrectFill' && 'Email or password is invalid!'}</div>
+            <form method="post">
+                <label for="email" class="auth-label">
+                        Email
+                </label>
+                <input
+                        value={formValues.email}
+                        id="email"
+                        type="email"
+                        name="email"
+                        class=`auth-input ${loginStatus === 'incorrectFill' ? 'fail' : ''}`
+                        placeholder="user@email.com"
+                        required 
+                />
+                <label for="password" class="auth-label">
+                        Password
+                </label>
+                <input
+                        value={formValues.password}
+                        id="password"
+                        type="password"
+                        name="password"
+                        class={`auth-input ${loginStatus === 'incorrectFill' ? 'fail' : ''}`}
+                        placeholder="********"
+                        required
+                        minlength="8"
+                    /> 
+                    <button
+                            type="submit"
+                            id="login-button"
+                            class='auth-button'
+                            data-response = {formResponse || ''}                            
+                        >
+                            Log-in
+                    </button>
+            </form>
+            <p class="mt-6">Need an account? <a href="/signup" class="text-link underline text-blue-700">Sign up</a></p>
+            <p>Forgot your account? <a href="/forgotpassword" class="text-link">Reset it</a></p>
+        </main>
+
+        <script is:inline>
+            const responseMessage = document.getElementById('res-msg')
+            const emailInput = document.getElementById('email');
+            const passwordInput = document.getElementById('password');
+            const loginButton = document.getElementById('login-button');
+            // const submittedInput = {email: emailInput.value, password: passwordInput.value}
+
+            function setLoading() {
+                loginButton.innerHTML = 'Please wait...';
+                loginButton.classList.add('auth-loading');
+            }
+            loginButton.addEventListener('click', setLoading);
+
+            
+            function changeForm() {
+                if (responseMessage.classList.value.includes('incorrectFill')) {
+                    emailInput.classList.remove('fail');
+                    passwordInput.classList.remove('fail')
+                }
+            }
+            emailInput.addEventListener('change', changeForm);
+            passwordInput.addEventListener('change', changeForm);
+
+            //save response to localStorage
+            if (loginButton.dataset.response) {
+                const response = JSON.parse(loginButton.dataset.response);
+                const userJWT = {
+                    value: response.token,
+                    expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+                }
+                const userInfo = {id: response.id, name: response.name, photo: response.photo}
+                localStorage.setItem('user_jwt', JSON.stringify(userJWT));
+	            localStorage.setItem('user_info', JSON.stringify(userInfo));
+                console.log(userJWT)
+                console.log(userInfo)
+            }
+        </script>
+    </body>
+</html> -->
