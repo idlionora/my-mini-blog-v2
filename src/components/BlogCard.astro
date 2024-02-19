@@ -1,17 +1,38 @@
 ---
 const {
-    blogpostImg,
+    index = 0,
+    blogpostImg = "/my-mini-blog/post_img/default.jpg",
     userId = "00",
     userName = "Guest",
     createdAt = Date.now().toString(),
     commentCount = 0,
     title = "Title will be shown here",
-    summary = "This is a short summary as preview for reader on what to be expected inside the post. Click the button below if you wanna read :)",
-    tags,
+    summary = "",
+    tags = [],
     slug = "title-will-be-shown-here",
 } = Astro.props
+
+const blogDate = new Date(createdAt);
 ---
 
 <div class="w-full max-w-sm bg-white rounded-lg overflow-hidden flex flex-col">
-
+    <div class="bg-neutral-100 w-full h-[55vw] max-h-[13.25rem] sm:h-48 md:h-44 cursor-pointer">
+        <img src={`${import.meta.env.PUBLIC_IMG_HOST}${blogpostImg}`} alt={`blog image ${index}`} class="w-full h-full object-cover">
+    </div>
+    <div class="px-3 pt-2 pb-4">
+        <h3 class="text-heading text-xl">{title}</h3>
+        <p class="text-sm mt-0.5">{blogDate.toLocaleDateString("id")} – <a href="">{userName}</a></p>
+        <div class="overflow-y-auto mt-4">
+            {summary}
+        </div>
+        <div class="mt-4 text-sm">
+            {tags.map((tag:string) => <a href="" class="underline pr-2">{`#${tag}`}</a>)}
+        </div>
+        <p class="text-sm">
+            {commentCount > 1 ? "comments" : "comment"}: {commentCount}
+        </p>
+        <div class="mt-4 w-full flex justify-center">
+            <a href="" class="">Read Post</a>
+        </div>
+    </div>
 </div>
