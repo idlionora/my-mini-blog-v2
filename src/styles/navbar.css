@@ -2,7 +2,6 @@
   margin-left: 1rem;
   text-decoration-thickness: 1px;
   text-underline-offset: 4px;
-  
 }
 
 .nav-link:hover {
@@ -25,7 +24,7 @@
   width: 100%;
 }
 
-.button-usermenu:hover {
+.button-usermenu:hover, .button-usermenu:focus {
   background-color: var(--color-neutral-00);
 }
 
@@ -41,7 +40,7 @@
   text-underline-offset: 4px;
 }
 
-.button-mobilemenu:hover {
+.button-mobilemenu:hover, .button-mobilemenu:focus {
   background-color: #e0e7ff;
   color: #1d4ed8;
 }

@@ -1,96 +1,142 @@
 /* Variables */
 :root {
-    --color-neutral-00: #eef1ff;
-    --color-neutral-01: #d2daff;
-    --color-theme-blue: #aac4ff;
-    --color-theme-purple: #b1b2ff;
-    --color-button-green: #b3ffae;
-    --color-button-red: #ff7d7d;
+	--color-neutral-00: #eef1ff;
+	--color-neutral-01: #d2daff;
+	--color-theme-blue: #aac4ff;
+	--color-theme-purple: #b1b2ff;
+	--color-button-green: #b3ffae;
+	--color-button-red: #ff7d7d;
 }
 
 /* font import: Source Sans Pro */
 @font-face {
-  font-family: 'Source Sans Pro';
-  font-weight: 300;
-  src: url('/fonts/sourcesanspro-light-webfont.woff2') format('woff2'),
-       url('/fonts/sourcesanspro-light-webfont.woff') format('woff')
+	font-family: 'Source Sans Pro';
+	font-weight: 300;
+	src:
+		url('/fonts/sourcesanspro-light-webfont.woff2') format('woff2'),
+		url('/fonts/sourcesanspro-light-webfont.woff') format('woff');
 }
 
 @font-face {
-  font-family: 'Source Sans Pro';
-  font-style: italic;
-  font-weight: 300;
-  src: url('/fonts/sourcesanspro-lightitalic-webfont.woff2') format('woff2'),
-       url('/fonts/sourcesanspro-lightitalic-webfont.woff') format('woff')
+	font-family: 'Source Sans Pro';
+	font-style: italic;
+	font-weight: 300;
+	src:
+		url('/fonts/sourcesanspro-lightitalic-webfont.woff2') format('woff2'),
+		url('/fonts/sourcesanspro-lightitalic-webfont.woff') format('woff');
 }
 
 @font-face {
-  font-family: 'Source Sans Pro';
-  font-weight: 400;
-  src: url('/fonts/sourcesanspro-regular-webfont.woff2') format('woff2'),
-       url('/fonts/sourcesanspro-regular-webfont.woff') format('woff')
+	font-family: 'Source Sans Pro';
+	font-weight: 400;
+	src:
+		url('/fonts/sourcesanspro-regular-webfont.woff2') format('woff2'),
+		url('/fonts/sourcesanspro-regular-webfont.woff') format('woff');
 }
 
 @font-face {
-  font-family: 'Source Sans Pro';
-  font-style: italic;
-  font-weight: 400;
-  src: url('/fonts/sourcesanspro-italic-webfont.woff2') format('woff2'),
-       url('/fonts/sourcesanspro-italic-webfont.woff') format('woff')
+	font-family: 'Source Sans Pro';
+	font-style: italic;
+	font-weight: 400;
+	src:
+		url('/fonts/sourcesanspro-italic-webfont.woff2') format('woff2'),
+		url('/fonts/sourcesanspro-italic-webfont.woff') format('woff');
 }
 
 @font-face {
-  font-family: 'Source Sans Pro';
-  font-weight: 600;
-  src: url('/fonts/sourcesanspro-semibold-webfont.woff2') format('woff2'),
-       url('/fonts/sourcesanspro-semibold-webfont.woff') format('woff')
+	font-family: 'Source Sans Pro';
+	font-weight: 600;
+	src:
+		url('/fonts/sourcesanspro-semibold-webfont.woff2') format('woff2'),
+		url('/fonts/sourcesanspro-semibold-webfont.woff') format('woff');
 }
 
 @font-face {
-  font-family: 'Source Sans Pro';
-  font-style: italic;
-  font-weight: 600;
-  src: url('/fonts/sourcesanspro-semibolditalic-webfont.woff2') format('woff2'),
-       url('/fonts/sourcesanspro-semibolditalic-webfont.woff') format('woff')
+	font-family: 'Source Sans Pro';
+	font-style: italic;
+	font-weight: 600;
+	src:
+		url('/fonts/sourcesanspro-semibolditalic-webfont.woff2') format('woff2'),
+		url('/fonts/sourcesanspro-semibolditalic-webfont.woff') format('woff');
 }
 
 /* font import: Oxygen */
 @font-face {
-  font-family: 'Oxygen';
-  font-weight: 300;
-  src: url('/fonts/oxygen-light-webfont.woff2') format('woff2'),
-       url('/fonts/oxygen-light-webfont.woff') format('woff');
+	font-family: 'Oxygen';
+	font-weight: 300;
+	src:
+		url('/fonts/oxygen-light-webfont.woff2') format('woff2'),
+		url('/fonts/oxygen-light-webfont.woff') format('woff');
 }
 
 @font-face {
-  font-family: 'Oxygen';
-  font-weight: 400;
-  src: url('/fonts/oxygen-regular-webfont.woff2') format('woff2'),
-       url('/fonts/oxygen-regular-webfont.woff') format('woff');
+	font-family: 'Oxygen';
+	font-weight: 400;
+	src:
+		url('/fonts/oxygen-regular-webfont.woff2') format('woff2'),
+		url('/fonts/oxygen-regular-webfont.woff') format('woff');
 }
 
 @font-face {
-  font-family: 'Oxygen';
-  font-weight: 700;
-  src: url('/fonts/oxygen-bold-webfont.woff2') format('woff2'),
-       url('/fonts/oxygen-bold-webfont.woff') format('woff');
+	font-family: 'Oxygen';
+	font-weight: 700;
+	src:
+		url('/fonts/oxygen-bold-webfont.woff2') format('woff2'),
+		url('/fonts/oxygen-bold-webfont.woff') format('woff');
 }
 
 /* Selector Config */
 * {
-    box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 body {
-    font-family: 'Source Sans Pro', Arial, Helvetica, sans-serif;
-    font-weight: 400;
+	font-family: 'Source Sans Pro', Arial, Helvetica, sans-serif;
+	font-weight: 400;
 }
 
 .text-link {
-  text-decoration: underline;
-  color: #1d4ed8; /*text-blue-700*/
+	text-decoration: underline;
+	color: #1d4ed8; /*text-blue-700*/
 }
 
-.text-link:hover{
-  color: #9333ea; /*text-purple-600*/
+.text-link:hover {
+	color: #9333ea; /*text-purple-600*/
+}
+
+/* Blog Card */
+.card-link:hover, .card-link:focus {
+	color: #9333ea;
+	text-decoration-line: underline;
+}
+
+.card-link-title:hover, .card-link-title:focus {
+	color: #b1b2ff;
+}
+
+.card-link:focus {
+	outline-offset: 3px;
+}
+
+.card-readpost {
+	display: flex;
+	width: fit-content;
+	align-items: center;
+	background-color: var(--color-theme-blue);
+	padding: 0.5rem 0.625rem;
+	border-radius: 0.375rem;
+	color: white;
+}
+
+.card-readpost:hover, .card-readpost:active {
+	background-color: #fef08a;
+	color: #451a03;
+}
+
+.card-arrow {
+	filter: invert(100%);
+}
+
+.card-readpost:hover > .card-arrow, .card-readpost:active > .card-arrow {
+	filter: invert(10%) sepia(71%) saturate(1858%) hue-rotate(3deg) brightness(94%) contrast(98%);
 }
