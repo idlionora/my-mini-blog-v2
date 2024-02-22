@@ -14,7 +14,7 @@ const {title = "My Mini Blog"} = Astro.props as Props;
 
 <html lang="en">
 	<MainHead {title}/>
-	<body class="bg-neutral-00 relative w-screen min-h-dvh overflow-hidden">
+	<body class="bg-neutral-00 relative w-full min-h-dvh overflow-x-hidden">
 		<NavigationBar />
 		<slot/>
 		<script src="../scripts/navbar.js"></script>

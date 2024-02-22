@@ -1,7 +1,8 @@
 ---
+
 const {
     index = 0,
-    blogpostImg = "/my-mini-blog/post_img/default.jpg",
+    blogpostImg = "/my-mini-blog/blogpost_img/default.jpg",
     userId = "00",
     userName = "Guest",
     createdAt = Date.now().toString(),
@@ -11,18 +12,17 @@ const {
     tags = [],
     slug = "title-will-be-shown-here",
 } = Astro.props
-
 const blogDate = new Date(createdAt);
 ---
 
 <div class="w-full max-w-sm bg-white rounded-lg overflow-hidden flex flex-col">
-    <div class="bg-neutral-100 w-full h-[55vw] max-h-[13.25rem] sm:h-48 md:h-44">
+    <div class=`bg-neutral-100 w-full h-[55vw] max-h-[13.25rem] sm:h-48 md:h-44 ${blogpostImg === "/my-mini-blog/blogpost_img/default.jpg" ? "border-2 border-gray-300" : ""}`>
         <img src={`${import.meta.env.PUBLIC_IMG_HOST}${blogpostImg}`} alt={`blog image ${index}`} class="w-full h-full object-cover">
     </div>
     <div class="px-3 pt-2 pb-4">
-        <h3 class="text-heading text-xl font-semibold text-theme-blue"><a href="" class="card-link card-link-title">{title}</a></h3>
+        <h3 class="text-heading text-xl font-semibold text-theme-blue"><a id=`card-title-${index}` href="" class="string-title card-link card-link-title whitespace-pre-wrap" >{title}</a></h3>
         <p class="text-sm mt-0.5">{blogDate.toLocaleDateString("id")} – <a href="" class="card-link">{userName}</a></p>
-        <div class="overflow-y-auto mt-4">
+        <div id=`card-summary-${index}` class="string-summary max-h-[12rem] overflow-y-auto mt-4">
             {summary}
         </div>
         <div class="mt-4 text-sm">
