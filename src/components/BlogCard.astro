@@ -20,18 +20,18 @@ const blogDate = new Date(createdAt);
         <img src={`${import.meta.env.PUBLIC_IMG_HOST}${blogpostImg}`} alt={`blog image ${index}`} class="w-full h-full object-cover">
     </div>
     <div class="px-3 pt-2 pb-4">
-        <h3 class="text-heading text-xl font-semibold text-theme-blue"><a id=`card-title-${index}` href="" class="string-title card-link card-link-title whitespace-pre-wrap" >{title}</a></h3>
-        <p class="text-sm mt-0.5">{blogDate.toLocaleDateString("id")} – <a href="" class="card-link">{userName}</a></p>
+        <h3 class="text-heading text-xl font-semibold text-theme-blue"><a id=`card-title-${index}` href={`/blogs/${slug}`} class="string-title card-link card-link-title whitespace-pre-wrap" >{title}</a></h3>
+        <p class="text-sm mt-0.5">{blogDate.toLocaleDateString("id")} – <a href={`/users/${userId}`} class="card-link">{userName}</a></p>
         <div id=`card-summary-${index}` class="string-summary max-h-[12rem] overflow-y-auto mt-4">
             {summary}
         </div>
         <div class="mt-4 text-sm">
-            {tags.map((tag:string) => <a href="" class="mr-2 card-link">{`#${tag}`}</a>)}
+            {tags.map((tag:string) => <a href={`/tags/${tag}`} class="mr-2 card-link">{`#${tag}`}</a>)}
         </div>
         <p class="text-sm">
             {commentCount > 1 ? "comments" : "comment"}: {commentCount}
         </p>
-        <a href="" class="card-readpost mt-4">
+        <a href={`/blogs/${slug}`} class="card-readpost mt-4">
             Read Post
             <img src="/icons/move-right.svg" alt="" class="w-3 ml-1.5 card-arrow">
         </a>
