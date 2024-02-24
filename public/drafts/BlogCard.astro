@@ -1,17 +1,16 @@
 ---
-
+const {frontmatter, index} = Astro.props
 const {
-    index = 0,
     blogpostImg = "/my-mini-blog/blogpost_img/default.jpg",
-    userId = "00",
-    userName = "Guest",
+    user = {_id: '00', name: 'Guest'},
     createdAt = Date.now().toString(),
     commentCount = 0,
     title = "Title will be shown here",
     summary = "",
     tags = [],
     slug = "title-will-be-shown-here",
-} = Astro.props
+} = frontmatter
+const {_id: userId, name: userName} = user;
 const blogDate = new Date(createdAt);
 ---
 
@@ -20,7 +19,7 @@ const blogDate = new Date(createdAt);
         <img src={`${import.meta.env.PUBLIC_IMG_HOST}${blogpostImg}`} alt={`blog image ${index}`} class="w-full h-full object-cover">
     </div>
     <div class="px-3 pt-2 pb-4">
-        <h3 class="text-heading text-xl font-semibold text-theme-blue"><a id=`card-title-${index}` href={`/blogs/${slug}`} class="string-title card-link card-link-title whitespace-pre-wrap" >{title}</a></h3>
+        <h3 class="text-heading text-xl font-semibold text-theme-blue"><a id=`card-title-${index}` href={`/blogs/${slug}`} class="string-title card-link card-link-title" >{title}</a></h3>
         <p class="text-sm mt-0.5">{blogDate.toLocaleDateString("id")} – <a href={`/users/${userId}`} class="card-link">{userName}</a></p>
         <div id=`card-summary-${index}` class="string-summary max-h-[12rem] overflow-y-auto mt-4">
             {summary}

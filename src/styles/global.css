@@ -104,39 +104,7 @@ body {
 	color: #9333ea; /*text-purple-600*/
 }
 
-/* Blog Card */
-.card-link:hover, .card-link:focus {
-	color: #9333ea;
-	text-decoration-line: underline;
-}
-
-.card-link-title:hover, .card-link-title:focus {
-	color: #b1b2ff;
-}
-
-.card-link:focus {
-	outline-offset: 3px;
-}
-
-.card-readpost {
-	display: flex;
-	width: fit-content;
-	align-items: center;
-	background-color: var(--color-theme-blue);
-	padding: 0.5rem 0.625rem;
-	border-radius: 0.375rem;
-	color: white;
-}
-
-.card-readpost:hover, .card-readpost:active {
-	background-color: #fef08a;
-	color: #451a03;
-}
-
-.card-arrow {
-	filter: invert(100%);
-}
-
-.card-readpost:hover > .card-arrow, .card-readpost:active > .card-arrow {
-	filter: invert(10%) sepia(71%) saturate(1858%) hue-rotate(3deg) brightness(94%) contrast(98%);
+/* Icons's Color */
+.filter-green-500 {
+	filter: invert(64%) sepia(63%) saturate(557%) hue-rotate(88deg) brightness(86%) contrast(91%);
 }
