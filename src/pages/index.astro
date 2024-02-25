@@ -1,31 +1,45 @@
 ---
-import MainLayout from "@layouts/MainLayout.astro"
+import MainLayout from "@layouts/MainLayout.astro";
+import BlogCard from "@components/BlogCard.astro";
 
+let savedBlogs = await Astro.glob('@data/blogposts/*.md');
+savedBlogs = savedBlogs.reverse();
 ---
 
 <MainLayout title="myMiniBlog">
 	<main class="w-full px-4 sm:px-5 flex flex-col items-center">
-		<h2 class="font-heading font-bold text-[1.25rem] bg-theme-blue px-4 py-3 w-full max-w-[18rem] text-center rounded-2xl text-neutral-100 mt-9 mb-7">All Blog Posts</h2>
-		<section id="fetch-message" class="w-full flex flex-col items-center text-center"><img src="/images/noun-download-6624142.png" alt="Downloading from Database" class="px-1 w-28 mt-8 filter-green-500"><p class="text-[1.5rem] text-green-500 mt-5 w-full">Fetching data, please&nbsp;wait...</p></section>
-		<section id="blogcard-container" class="w-full max-w-screen-xl flex flex-col items-center sm:items-stretch sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-7 pb-28"></section>
+		<h1 id="index-header" class="font-heading font-bold text-[1.25rem] bg-theme-blue px-4 py-3 w-full max-w-[18rem] text-center rounded-2xl text-neutral-100 mt-9 mb-7">Recent Blog Posts</h2>
+		<section id="fetch-message" class="w-full flex-col items-center text-center pt-3 pb-5 hidden"><img src="/images/noun-download-6624142.png" alt="Downloading from Database" class="px-1 w-28 filter-green-500"><p class="text-[1.5rem] text-green-500 mt-5 w-full">Fetching data, please&nbsp;wait...</p></section>
+		<section id="blogcard-container" class="w-full max-w-screen-xl flex flex-col items-center sm:items-stretch sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-7 pb-28">
+			{savedBlogs.map((blog, index) => <BlogCard {index} frontmatter={blog.frontmatter}/>)}
+		</section>
 	</main>
 </MainLayout>
 
 <script>
 	import axios from "axios";
+	import blogCard, {type BlogCardData} from "@scripts/blogCard";
 
+	const indexHeader = document.getElementById('index-header')
 	const fetchMessage = document.getElementById('fetch-message');
 	const cardContainer = document.getElementById('blogcard-container');
+	const latestPostDate = document.getElementById('blog-date-0');
 
 	try {
+		fetchMessage!.className = 'w-full flex flex-col items-center text-center pt-3 pb-5'
 		const res = (await axios.get(`${import.meta.env.PUBLIC_APISITE}/blogposts/?fields=title,summary,slug,blogpostImg,tags,createdAt,user,commentCount`));
 		const cardsData = res.data.data;
-
-		// const cardsInsert = cardsData.map((card, index) => {return <BlogCard frontmatter={card} {index} />})
-		console.log(res)
+		const cardsInsert = cardsData.map((cardData: BlogCardData, index:number) => {return blogCard({cardData, index})})
+		const parsedCards = new DOMParser().parseFromString(cardsInsert.join(''), 'text/html').body;
+		
+		if (cardContainer) {
+			cardContainer.innerHTML = parsedCards.innerHTML;
+		}
+		
+		fetchMessage!.className = 'w-full flex-col items-center text-center pt-3 pb-5 hidden'
 	} catch(err) {
 		console.log(err)
-
+		fetchMessage!.className = 'w-full flex-col items-center text-center pt-3 pb-5 hidden'
+		indexHeader!.innerText = `Latest saved: ${latestPostDate?.innerText}`
 	}
-
 </script>

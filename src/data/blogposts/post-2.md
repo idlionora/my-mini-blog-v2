@@ -8,8 +8,8 @@ blogthumbImg: /my-mini-blog/blogthumb_img/default.jpg
 bannerImg: /my-mini-blog/banner_img/default.jpg
 content: Insert long sentences here, 26 characters at minimum.
 tags: ['computer science', 'journaling']
-createdAt: 2024-02-18T12:08:46.028Z
-updatedAt: 2024-02-18T12:08:46.028Z
+createdAt: 2024-02-24T12:08:46.028Z
+updatedAt: 2024-02-24T12:08:46.028Z
 user: {
     _id: '655c7a2bd2ffdd11ea492d1c',
     name: 'Barry T. Quokka',
