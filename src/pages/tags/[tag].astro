@@ -1,0 +1,10 @@
+---
+import MainLayout from "@layouts/MainLayout.astro"
+
+const {tag} = Astro.params;
+---
+
+<MainLayout title={`Tag:"${tag}"`}>
+	<h1>{tag}</h1>
+</MainLayout>
+
