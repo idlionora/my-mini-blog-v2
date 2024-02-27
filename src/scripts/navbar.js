@@ -109,7 +109,7 @@ const logout = () => {
 	localStorage.removeItem('user_jwt');
 	localStorage.removeItem('user_info');
 	userName.innerHTML = 'Guest';
-	userPhoto.src = '/images/noun-user-1256674-profile.png';
+	userPhoto.src = '/images/noun-user-1256674-profile.jpg';
 	setNavbarLogout();
 };
 
@@ -117,7 +117,7 @@ const logout = () => {
 function appendUserInfo({ name, photo }) {
 	userName.innerHTML = name;
 
-	if (photo[1] === 'v') {
+	if (photo.includes('my-mini-blog/user')) {
 		userPhoto.src = `${import.meta.env.PUBLIC_IMG_HOST}${photo}`;
 	} else {
 		userPhoto.src = photo;

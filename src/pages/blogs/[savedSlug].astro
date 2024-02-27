@@ -1,0 +1,61 @@
+---
+export const prerender = true;
+import MainLayout from "@layouts/MainLayout.astro"
+import type { GetStaticPaths, MarkdownInstance } from "astro";
+
+export const getStaticPaths =(async () => {
+	const allSavedPosts: MarkdownInstance<Record<string, any>>[] = await Astro.glob("@data/blogposts/*.md");
+	const frontmatters = allSavedPosts.map((blogpost) => blogpost.frontmatter);
+	
+	return frontmatters.map((blog) => { return {
+		params: {savedSlug: blog.slug},
+		props: blog
+	}})
+}) satisfies GetStaticPaths;
+
+const {id: blogId, title, summary, slug, blogpostImg, blogthumbImg, bannerImg, content, tags, createdAt : createdString, updatedAt: updatedString, user, commentCount} = Astro.props;
+const {_id: userId, name: userName, photo: userPhoto} = user;
+let createdAt: Date = new Date(createdString);
+const dateOptions: Intl.DateTimeFormatOptions = {
+	day: 'numeric',
+	month: 'long',
+	year: 'numeric',
+}
+const createdAtShort = new Intl.DateTimeFormat('id').format(createdAt);
+const createdAtLong = new Intl.DateTimeFormat('id', dateOptions).format(createdAt);
+let updatedAt: Date | string = new Date(updatedString);
+updatedAt = new Intl.DateTimeFormat('id').format(updatedAt);
+
+---
+
+<MainLayout title={title}>
+	<main class="w-full flex flex-col items-center">
+		<section class="w-full max-w-[82.5rem] bg-neutral-100 h-40 sm:h-48 md:h-52 lg:h-56">
+			<img src={`${import.meta.env.PUBLIC_IMG_HOST}${bannerImg}`} alt="Banner Image" class="w-full h-full object-cover object-center">	
+		</section>
+		<section class="w-full max-w-[82.5rem] grid grid-cols-12 mb-7">
+			<div class="col-span-full md:col-span-8 lg:col-span-9 px-4 sm:px-5 lg:pr-7">
+				<div class="flex w-full justify-between min-[400px]:justify-start mt-3 mb-2 md:px-3 md:mt-4 lg:px-4 gap-4 sm:gap-5">
+					<div class="flex items-center">
+						<div class="w-9 h-9 bg-white rounded-full shrink-0 overflow-hidden flex justify-center items-center mr-2 sm:mr-1">
+							<img src={`${import.meta.env.PUBLIC_IMG_HOST}${userPhoto}`} alt={`${userName.split(" ")[0]}'s photo'`} class="w-10 h-10 object-cover object-center">
+						</div>
+						<p>{userName}</p>
+					</div>
+					<div class="flex flex-col min-[350px]:flex-row items-center gap-x-4">
+						<div class="flex items-center">
+							<img src="/icons/calendar.svg" alt="Created at" class="h-4 w-fit mr-1 opacity-95">
+							<p class="min-[350px]:hidden">{createdAtShort}</p>
+							<p class="hidden min-[350px]:block">{createdString === updatedString ? createdAtLong : createdAtShort}</p>
+						</div>
+						{createdString !== updatedString ? <div class="flex items-center"><img src="/icons/calendar-plus.svg" alt="Updated at" class="h-4 w-fit mr-1 opacity-95" /><p>{updatedAt}</p></div>:<></>}
+					</div>
+				</div>
+				<article class="w-full md:pl-3 lg:pl-4">
+					<h1 class="font-heading font-bold text-2xl mb-3" set:html={title} />
+					<p set:html={content} />
+				</article>
+			</div>
+		</section>
+	</main>
+</MainLayout>
