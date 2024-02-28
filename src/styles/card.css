@@ -40,7 +40,7 @@
         height: 11rem;
     }
 }
-@media (min-width: 1024px) {}
+/* @media (min-width: 1024px) {} */
 
 .card-link-title {
     font-family: 'Oxygen', 'Helvetica', 'sans-serif';

@@ -103,6 +103,7 @@ function setNavbarLogout() {
 	userMenuLogout.removeEventListener('click', logout);
 	mobileMenuLogout.removeEventListener('click', logout);
 	userMenuButton.removeEventListener('click', toggleUserMenu);
+	closeUserMenu()
 }
 
 const logout = () => {

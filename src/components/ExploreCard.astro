@@ -1,0 +1,17 @@
+---
+const {cardData, index} = Astro.props
+const {title, blogthumbImg, content, slug} = cardData;
+---
+
+<a href="/blogs/${slug}" class="explore-card-main">
+    <div class="explore-image-container">
+        <img src="${import.meta.env.PUBLIC_IMG_HOST}${blogthumbImg}" alt="thumbnail ${index}" class="object-scale-down"/>
+    </div>
+    <div class="explore-text-container">
+        <h3 class="font-heading font-bold text-sm mb-2">${title}</h3>
+        <p class="text-sm line-clamp-3 md:line-clamp-4 xl:line-clamp-3">${content}</p>
+    </div>
+</a>
+
+
+

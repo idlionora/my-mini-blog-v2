@@ -1,0 +1,54 @@
+.explore-card-main {
+    width: 100%;
+    max-width: 21.9rem;
+    background-color: white;
+    min-height: 6.5rem;
+    padding: 3px;
+    display: flex;
+    align-items: flex-start;
+    border-color: var(--color-theme-blue);
+    cursor: pointer;
+}
+
+.explore-image-container {
+    background-color: black;
+    height: 6.5rem;
+    min-width: 6rem;
+}
+
+.explore-image {
+    object-fit: scale-down;
+}
+
+.explore-text-container {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+}
+
+.explore-title {
+    font-family: 'Oxygen', 'Helvetica', 'sans-serif';
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.explore-text {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+}
+
+@media (min-width: 768px) {
+    .explore-text {
+        -webkit-line-clamp: 4;
+    }
+}
+
+@media (min-width: 1280px) {
+    .explore-text {
+        -webkit-line-clamp: 3;
+    }
+}
+
