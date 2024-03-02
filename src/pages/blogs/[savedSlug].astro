@@ -74,61 +74,16 @@ updatedAt = new Intl.DateTimeFormat('id').format(updatedAt);
 </MainLayout>
 
 <script>
-	import axios from "axios";
-	import exploreCard, {type ExploreCardData} from "@scripts/exploreCard";
-	import shuffleArray from "@scripts/shuffleArray"
+	import fetchExploreCards from "@scripts/fetchExploreCards"
 
 	const blogpostArticle = document.getElementById('blogpost-article')
-	const blogId = blogpostArticle?.dataset.blogid;
+	const currentBlogId = blogpostArticle?.dataset.blogid;
 	const tagList = document.getElementById('tag-list')
 	const tagString = tagList?.dataset.tags;
 	const expCardContainer = document.getElementById('explore-card-container');
-	const exploreFetchMessage = document.getElementById('explore-fetch-message');
-
-	async function mapExploreCards(idArr:string[]) {
-		const res2 = (await axios.get(`${import.meta.env.PUBLIC_APISITE}/blogposts/?fields=title,blogthumbImg,content,slug&_id=${idArr.join()}`));
-		const cardsData = res2.data.data;
-		const cardsInsert = cardsData.map((cardData: ExploreCardData, index: number) => {return exploreCard({cardData, index})});
-		const parserdCards = new DOMParser().parseFromString(cardsInsert.join(''), 'text/html').body;
-
-		if (expCardContainer) {
-			expCardContainer.innerHTML = parserdCards.innerHTML;
-		}
-	}
-
-	async function fetchExploreCards() {
-		try {
-			exploreFetchMessage!.className = 'absolute flex flex-col items-center w-full px-4 sm:px-2.5'
-			
-			if (!tagString) {
-				exploreFetchMessage!.innerText = 'No related post available.'
-				return
-			}
-
-			const res = (await axios.get(`${import.meta.env.PUBLIC_APISITE}/tags/?tag=${tagString}`));
-			const resData = res.data.data
-			let blogpostIds = resData.map((tagData: {_id: string, tag: string, blogposts: string[]}) => tagData.blogposts).flat()
-			blogpostIds = blogpostIds.filter((value:string, index:number, array:string[]) => array.indexOf(value) === index)
-			blogpostIds.splice(blogpostIds.indexOf(blogId), 1);
-
-			if (blogpostIds.length < 1) {
-				exploreFetchMessage!.innerText = 'No related post available.'
-				return
-			} else if (blogpostIds.length < 6) {
-				await mapExploreCards(blogpostIds);
-				return
-			}
-
-			const shuffledIds = shuffleArray<string>(blogpostIds);
-			await mapExploreCards(shuffledIds);
-		} catch(err) {
-			console.log(err)
-			exploreFetchMessage!.innerText = 'Related post is unable to load'
-		}
-	}
-
-	fetchExploreCards()
-
+	const exploreFetchMesage = document.getElementById('explore-fetch-message');
+	
+	fetchExploreCards({tagString, excludedId: currentBlogId, cardContainer: expCardContainer, fetchingMessage: exploreFetchMesage});
 	
 
 </script>
