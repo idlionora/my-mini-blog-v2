@@ -31,7 +31,7 @@ async function fetchExploreCards({
 	fetchingMessage,
 }: BlogsKeyForExploreCards) {
 	try {
-		fetchingMessage!.className = fetchingMessage.className.replace('hidden', 'flex');
+		fetchingMessage!.className = fetchingMessage!.className.replace('hidden', 'flex');
 
 		if (!tagString) {
 			fetchingMessage!.innerText = 'No related post available.';

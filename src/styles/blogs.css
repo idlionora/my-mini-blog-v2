@@ -1,3 +1,42 @@
+.blogpost-grid-main {
+    grid-area: main;
+}
+
+.blogpost-grid-comment {
+    grid-area: comment;
+}
+
+.blogpost-grid-sidebar {
+    grid-area: sidebar;
+}
+
+.blogpost-grid-container {
+    display: grid;
+    grid-template-rows: auto;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-areas:
+        "main main main"
+        "comment comment comment"
+        "sidebar sidebar sidebar";    
+}
+
+@media (min-width: 768px) {
+    .blogpost-grid-container {
+        grid-template-areas: 
+            "main main sidebar"
+            "comment comment comment";
+    }
+}
+
+@media (min-width: 1024px) {
+    .blogpost-grid-container {
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        grid-template-areas:
+            "main main main sidebar"
+            "comment comment comment comment";
+    }
+}
+
 .explore-card-main {
     width: 100%;
     max-width: 21.9rem;

@@ -2,7 +2,7 @@
 export const prerender = true;
 import MainLayout from "@layouts/MainLayout.astro"
 import type { GetStaticPaths, MarkdownInstance } from "astro";
-import "@styles/exploreCard.css"
+import "@styles/blogs.css"
 
 export const getStaticPaths =(async () => {
 	const allSavedPosts: MarkdownInstance<Record<string, any>>[] = await Astro.glob("@data/blogposts/*.md");
@@ -34,8 +34,8 @@ updatedAt = new Intl.DateTimeFormat('id').format(updatedAt);
 		<section class="w-full max-w-[82.5rem] bg-neutral-100 h-40 sm:h-48 md:h-52 lg:h-56">
 			<img src={`${import.meta.env.PUBLIC_IMG_HOST}${bannerImg}`} alt="Banner Image" class={`w-full h-full object-cover object-center ${bannerImg.includes('default') ? 'border-[2px] border-gray-300': ''}`}>	
 		</section>
-		<div class="w-full max-w-[82.5rem] grid grid-cols-12 mb-7">
-			<section class="col-span-full md:col-span-8 lg:col-span-9 px-4 sm:px-5 lg:pr-7">
+		<div class="blogpost-grid-container w-full max-w-[82.5rem] mb-7">
+			<section class="blogpost-grid-main px-4 sm:px-5 lg:pr-7">
 				<div class="flex w-full justify-between min-[400px]:justify-start mt-3 mb-2 md:px-3 md:mt-4 lg:px-4 gap-4 sm:gap-5">
 					<div class="flex items-center">
 						<div class="w-9 h-9 bg-white rounded-full shrink-0 overflow-hidden flex justify-center items-center mr-2 sm:mr-1">
@@ -60,7 +60,8 @@ updatedAt = new Intl.DateTimeFormat('id').format(updatedAt);
 					</div>
 				</article>
 			</section>
-			<section class="col-span-full md:col-span-4 lg:col-span-3 px-4 sm:px-5 md:pl-0 relative">
+			<section class="blogpost-grid-comment w-full h-60 bg-purple-400"></section>
+			<section class="blogpost-grid-sidebar px-4 sm:px-5 md:pl-0 relative">
 				<h2 class="font-heading text-lg font-bold tracking-wider mt-5">Explore Other Post</h2>
 				<div class="w-full h-[0.2rem] bg-theme-purple mb-3"/>
 				<div id="explore-card-container" class="w-full grid sm:grid-cols-2 md:grid-cols-1 gap-2 justify-items-center">
