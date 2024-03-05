@@ -21,11 +21,12 @@ const dateOptions: Intl.DateTimeFormatOptions = {
 	day: 'numeric',
 	month: 'long',
 	year: 'numeric',
+	timeZone: 'Asia/Jakarta'
 }
-const createdAtShort = new Intl.DateTimeFormat('id').format(createdAt);
-const createdAtLong = new Intl.DateTimeFormat('id', dateOptions).format(createdAt);
+const createdAtShort = new Intl.DateTimeFormat('en-US', {timeZone: 'Asia/Jakarta'}).format(createdAt);
+const createdAtLong = new Intl.DateTimeFormat('en-US', dateOptions).format(createdAt);
 let updatedAt: Date | string = new Date(updatedString);
-updatedAt = new Intl.DateTimeFormat('id').format(updatedAt);
+updatedAt = new Intl.DateTimeFormat('en-US').format(updatedAt);
 
 ---
 
@@ -38,8 +39,8 @@ updatedAt = new Intl.DateTimeFormat('id').format(updatedAt);
 			<section class="blogpost-grid-main px-4 sm:px-5 lg:pr-7">
 				<div class="flex w-full justify-between min-[400px]:justify-start mt-3 mb-2 md:px-3 md:mt-4 lg:px-4 gap-4 sm:gap-5">
 					<div class="flex items-center">
-						<div class="w-9 h-9 bg-white rounded-full shrink-0 overflow-hidden flex justify-center items-center mr-2 sm:mr-1">
-							<img src={`${import.meta.env.PUBLIC_IMG_HOST}${userPhoto}`} alt={`${userName.split(" ")[0]}'s photo'`} class="w-10 h-10 object-cover object-center">
+						<div class="userimg-container userimg-sm mr-2 sm:mr-1">
+							<img src={`${import.meta.env.PUBLIC_IMG_HOST}${userPhoto}`} alt={`${userName.split(" ")[0]}'s photo'`} class="user-photo">
 						</div>
 						<p>{userName}</p>
 					</div>
@@ -52,7 +53,7 @@ updatedAt = new Intl.DateTimeFormat('id').format(updatedAt);
 						{createdString !== updatedString ? <div class="flex items-center"><img src="/icons/calendar-plus.svg" alt="Updated at" class="h-4 w-fit mr-1 opacity-95" /><p>{updatedAt}</p></div>:<></>}
 					</div>
 				</div>
-				<article id="blogpost-article" class="w-full md:pl-3 lg:pl-4 pb-14" data-blogid={blogId}>
+				<article id="blogpost-article" class="w-full md:pl-3 lg:pl-4 pb-4" data-blogid={blogId}>
 					<h1 class="font-heading font-bold text-2xl mb-6" set:html={title} />
 					<p set:html={content} />
 					<div id="tag-list" class="mt-8" data-tags={tags.map((tag:string) => `${tag},`).join('').replace(/,$/, "")}>
@@ -60,7 +61,28 @@ updatedAt = new Intl.DateTimeFormat('id').format(updatedAt);
 					</div>
 				</article>
 			</section>
-			<section class="blogpost-grid-comment w-full h-60 bg-purple-400"></section>
+			<section class="blogpost-grid-comment w-full px-4 sm:px-5 flex flex-col items-center">
+				<div class="w-full max-w-2xl bg-theme-blue relative translate-x-[1px] drop-shadow-[7px_7px_0_#4267b2] py-3 px-3.5">
+					<div class="flex items-center">
+						<div class="userimg-container userimg-md mr-2 ml-0.5">
+							<img id="comment-userimg" src="/images/noun-user-1256674-profile.jpg" alt="User's photo" class="userimg-photo">
+						</div>
+						<p id="comment-username" class="font-semibold text-white text-base tracking-wide font-heading">Guest</p>
+					</div>
+					<form>
+						<textarea name="comment-textarea" id="comment-textarea" rows="5" placeholder="What's on your mind?" disabled={true} class="w-full rounded-lg py-2 px-3 text-base tracking-wide mt-2 outline-[#1e40af]"/>
+						<div class="w-full flex justify-between">
+							<p><span id="comment-textarea-count">1000</span> characters left</p>
+							<button id="comment-textarea-button" class="bg-[#4267b2] hover:bg-[#dbb632] text-white px-3.5 py-2 rounded-lg">Log in to Comment</button>
+						</div>
+					</form>
+				</div>
+				<div class="w-full max-w-2xl relative mt-10">
+					<h2 class="font-heading text-lg font-bold tracking-wider">Comments</h2>
+					<div class="w-full h-[0.2rem] bg-theme-purple mb-3"/>
+					<div class="absolute top-0 right-0 flex"></div>
+				</div>
+			</section>
 			<section class="blogpost-grid-sidebar px-4 sm:px-5 md:pl-0 relative">
 				<h2 class="font-heading text-lg font-bold tracking-wider mt-5">Explore Other Post</h2>
 				<div class="w-full h-[0.2rem] bg-theme-purple mb-3"/>
@@ -84,7 +106,7 @@ updatedAt = new Intl.DateTimeFormat('id').format(updatedAt);
 	const expCardContainer = document.getElementById('explore-card-container');
 	const exploreFetchMesage = document.getElementById('explore-fetch-message');
 	
-	fetchExploreCards({tagString, excludedId: currentBlogId, cardContainer: expCardContainer, fetchingMessage: exploreFetchMesage});
+	// fetchExploreCards({tagString, excludedId: currentBlogId, cardContainer: expCardContainer, fetchingMessage: exploreFetchMesage});
 	
 
 </script>

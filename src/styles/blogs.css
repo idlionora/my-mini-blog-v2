@@ -24,7 +24,7 @@
     .blogpost-grid-container {
         grid-template-areas: 
             "main main sidebar"
-            "comment comment comment";
+            "comment comment .";
     }
 }
 
@@ -33,7 +33,7 @@
         grid-template-columns: 1fr 1fr 1fr 1fr;
         grid-template-areas:
             "main main main sidebar"
-            "comment comment comment comment";
+            "comment comment comment .";
     }
 }
 
