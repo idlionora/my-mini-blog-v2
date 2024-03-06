@@ -28,6 +28,18 @@ const createdAtLong = new Intl.DateTimeFormat('en-US', dateOptions).format(creat
 let updatedAt: Date | string = new Date(updatedString);
 updatedAt = new Intl.DateTimeFormat('en-US').format(updatedAt);
 
+const commentDateOptions: Intl.DateTimeFormatOptions = {
+	weekday: 'short',
+	day: "numeric",
+	month: "long",
+	year: "numeric",
+	hour: "numeric",
+	minute: "numeric",
+	timeZone: 'Asia/Jakarta',
+	timeZoneName: 'short'
+}
+let commentDateTest: Date | string = new Date();
+commentDateTest = new Intl.DateTimeFormat('en-US', commentDateOptions).format(commentDateTest)
 ---
 
 <MainLayout title={title}>
@@ -35,7 +47,7 @@ updatedAt = new Intl.DateTimeFormat('en-US').format(updatedAt);
 		<section class="w-full max-w-[82.5rem] bg-neutral-100 h-40 sm:h-48 md:h-52 lg:h-56">
 			<img src={`${import.meta.env.PUBLIC_IMG_HOST}${bannerImg}`} alt="Banner Image" class={`w-full h-full object-cover object-center ${bannerImg.includes('default') ? 'border-[2px] border-gray-300': ''}`}>	
 		</section>
-		<div class="blogpost-grid-container w-full max-w-[82.5rem] mb-7">
+		<div class="blogpost-grid-container w-full max-w-[82.5rem] mb-20">
 			<section class="blogpost-grid-main px-4 sm:px-5 lg:pr-7">
 				<div class="flex w-full justify-between min-[400px]:justify-start mt-3 mb-2 md:px-3 md:mt-4 lg:px-4 gap-4 sm:gap-5">
 					<div class="flex items-center">
@@ -62,12 +74,12 @@ updatedAt = new Intl.DateTimeFormat('en-US').format(updatedAt);
 				</article>
 			</section>
 			<section class="blogpost-grid-comment w-full px-4 sm:px-5 flex flex-col items-center">
-				<div class="w-full max-w-2xl bg-theme-blue relative translate-x-[1px] drop-shadow-[7px_7px_0_#4267b2] py-3 px-3.5">
+				<div class="w-full max-w-2xl bg-theme-blue relative translate-x-[-3px] drop-shadow-[7px_7px_0_#4267b2] py-3 px-3.5">
 					<div class="flex items-center">
 						<div class="userimg-container userimg-md mr-2 ml-0.5">
-							<img id="comment-userimg" src="/images/noun-user-1256674-profile.jpg" alt="User's photo" class="userimg-photo">
+							<img id="comment-current-userimg" src="/images/noun-user-1256674-profile.jpg" alt="User's photo" class="userimg-photo">
 						</div>
-						<p id="comment-username" class="font-semibold text-white text-base tracking-wide font-heading">Guest</p>
+						<p id="comment-current-username" class="font-semibold text-white text-base tracking-wide font-heading">Guest</p>
 					</div>
 					<form>
 						<textarea name="comment-textarea" id="comment-textarea" rows="5" placeholder="What's on your mind?" disabled={true} class="w-full rounded-lg py-2 px-3 text-base tracking-wide mt-2 outline-[#1e40af]"/>
@@ -77,10 +89,42 @@ updatedAt = new Intl.DateTimeFormat('en-US').format(updatedAt);
 						</div>
 					</form>
 				</div>
-				<div class="w-full max-w-2xl relative mt-10">
+				<div class="w-full max-w-2xl relative mt-12">
 					<h2 class="font-heading text-lg font-bold tracking-wider">Comments</h2>
 					<div class="w-full h-[0.2rem] bg-theme-purple mb-3"/>
-					<div class="absolute top-0 right-0 flex"></div>
+					<div class="absolute top-0 right-0 translate-y-[-1rem] pagination-container">
+						<button id="pagination-arrow-left" class="button-pagination rounded-l" disabled={true}>←</button>
+						<div id="pagination-number-container" class="flex items-center">
+							<button class="button-pagination">1</button>
+							<button class="button-pagination-selected">2</button>
+							<button class="button-pagination">3</button>
+						</div>
+						<button id="pagination-arrow-right" class="button-pagination rounded-r" disabled={false}>→</button>
+					</div>
+					<div id="comment-container" class="w-full pt-2">
+						<div class="w-full overflow-hidden bg-white rounded-lg border-[#e5e7eb]">
+							<div class="w-full bg-theme-purple p-2">
+								<div class="flex items-center">
+									<div class="userimg-container userimg-md mr-2 ml-0.5">
+										<img src={`${import.meta.env.PUBLIC_IMG_HOST}${userPhoto}`} alt={`${userName.split(" ")[0]}'s photo'`} class="user-photo">
+									</div>
+									<div class="w-full flex flex-col sm:flex-row sm:items-center sm:justify-between">
+										<p>{userName}</p>
+										<p class="text-sm">{commentDateTest}</p>
+									</div>
+								</div>
+							</div>
+							<div class="w-full min-h-36 p-4 pb-3">
+								<div id="comment-content" class="w-full pb-3">
+									KPU specifically ordered us to spend all of the money with clear proceedings. Meaning, they required a full report and specific receipts in specific format. Meaning, we gotta spend the money by its intended use in specific manner. Meaning, we gotta be honest and be such exemplary citizens of this nation with its patriotic spirit for the election day, right? Hold on. Let’s rewind for a bit, this is actually troublesome for us. The budget came just about four days before the election day and we already had all but minor transactions happened already! We already haggled for tents, tables, and chairs; we asked the neighborhood housewives to prepare food for 2 meals and 4 times of snacks…
+								</div>
+								<div class="w-full flex items-center justify-end gap-3.5">
+									<button class="button-comment min-w-16 bg-button-green">Edit</button>
+									<button class="button-comment min-w-16 bg-button-red">Delete</button>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
 			</section>
 			<section class="blogpost-grid-sidebar px-4 sm:px-5 md:pl-0 relative">
