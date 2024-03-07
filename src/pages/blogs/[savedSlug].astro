@@ -52,7 +52,7 @@ commentDateTest = new Intl.DateTimeFormat('en-US', commentDateOptions).format(co
 				<div class="flex w-full justify-between min-[400px]:justify-start mt-3 mb-2 md:px-3 md:mt-4 lg:px-4 gap-4 sm:gap-5">
 					<div class="flex items-center">
 						<div class="userimg-container userimg-sm mr-2 sm:mr-1">
-							<img src={`${import.meta.env.PUBLIC_IMG_HOST}${userPhoto}`} alt={`${userName.split(" ")[0]}'s photo'`} class="user-photo">
+							<img src={`${import.meta.env.PUBLIC_IMG_HOST}${userPhoto}`} alt={`${userName.split(" ")[0]}'s photo'`} class="userimg-photo">
 						</div>
 						<p>{userName}</p>
 					</div>
@@ -79,13 +79,13 @@ commentDateTest = new Intl.DateTimeFormat('en-US', commentDateOptions).format(co
 						<div class="userimg-container userimg-md mr-2 ml-0.5">
 							<img id="comment-current-userimg" src="/images/noun-user-1256674-profile.jpg" alt="User's photo" class="userimg-photo">
 						</div>
-						<p id="comment-current-username" class="font-semibold text-white text-base tracking-wide font-heading">Guest</p>
+						<p id="comment-current-username" class="font-semibold text-white tracking-wide font-heading">Guest</p>
 					</div>
 					<form>
-						<textarea name="comment-textarea" id="comment-textarea" rows="5" placeholder="What's on your mind?" disabled={true} class="w-full rounded-lg py-2 px-3 text-base tracking-wide mt-2 outline-[#1e40af]"/>
+						<textarea name="comment-textarea" id="comment-textarea" rows="5" maxlength='1000' placeholder="What's on your mind?" disabled class="w-full rounded-lg py-2 px-3 text-base tracking-wide mt-2 outline-[#1e40af]"/>
 						<div class="w-full flex justify-between">
 							<p><span id="comment-textarea-count">1000</span> characters left</p>
-							<button id="comment-textarea-button" class="bg-[#4267b2] hover:bg-[#dbb632] text-white px-3.5 py-2 rounded-lg">Log in to Comment</button>
+							<button id="comment-textarea-button" class="bg-[#4267b2] hover:bg-theme-yellow text-white px-3.5 py-2 rounded-lg">Log in to Comment</button>
 						</div>
 					</form>
 				</div>
@@ -106,7 +106,7 @@ commentDateTest = new Intl.DateTimeFormat('en-US', commentDateOptions).format(co
 							<div class="w-full bg-theme-purple p-2">
 								<div class="flex items-center">
 									<div class="userimg-container userimg-md mr-2 ml-0.5">
-										<img src={`${import.meta.env.PUBLIC_IMG_HOST}${userPhoto}`} alt={`${userName.split(" ")[0]}'s photo'`} class="user-photo">
+										<img src={`${import.meta.env.PUBLIC_IMG_HOST}${userPhoto}`} alt={`${userName.split(" ")[0]}'s photo'`} class="userimg-photo">
 									</div>
 									<div class="w-full flex flex-col sm:flex-row sm:items-center sm:justify-between">
 										<p>{userName}</p>
@@ -151,6 +151,75 @@ commentDateTest = new Intl.DateTimeFormat('en-US', commentDateOptions).format(co
 	const exploreFetchMesage = document.getElementById('explore-fetch-message');
 	
 	// fetchExploreCards({tagString, excludedId: currentBlogId, cardContainer: expCardContainer, fetchingMessage: exploreFetchMesage});
+</script>
+<script>
+	const currentUserImg= document.getElementById('comment-current-userimg');
+	const currentUserName = document.getElementById('comment-current-username');
+	const commentTextArea = document.getElementById('comment-textarea') as HTMLTextAreaElement;
+	const commentCount = document.getElementById('comment-textarea-count');
+	const commentButton = document.getElementById('comment-textarea-button');
 	
+	let commentJWT:string | undefined;
+	let commentUserInfo:{id:string; name:string; photo:string} | undefined;
+
+	function countCharacters(event : Event) {
+		const target = event.target as HTMLTextAreaElement
+		// commentCount!.innerText 
+		if (target && commentCount) commentCount.innerText = (1000 - target.value.length).toString()
+
+	}
+
+	function postComment() {
+		
+	}
+
+	const setUserForComment = () => {
+		// get token value and expiration date
+		const userJWT = localStorage.getItem('user_jwt');
+		if (!userJWT) {
+			return;
+		};
+		const userJWTObj = JSON.parse(userJWT);
+		const dateExp = Date.parse(userJWTObj.expires);
+
+		// delete user's data from localStorage if expired
+		if (Date.now() > dateExp) {
+			localStorage.removeItem('user_jwt');
+			localStorage.removeItem('user_info');
+			return;
+		};
+		
+		// get current user info
+		const userInfo = localStorage.getItem('user_info');
+		if (!userInfo) {
+			localStorage.removeItem('user_jwt');
+			return;
+		};
+		
+		// set user's JWT token and info for comment
+		commentJWT = userJWTObj.value;
+		commentUserInfo = JSON.parse(userInfo);
+	}
+
+	const commentFormInit = () => {
+		if (!commentJWT || !commentUserInfo?.id) {
+			commentButton?.addEventListener('click', () => window.location.replace('/login'))
+		}
+
+		currentUserImg?.setAttribute('src', `${import.meta.env.PUBLIC_IMG_HOST}${commentUserInfo?.photo}`);
+		currentUserName!.innerText = commentUserInfo!.name;
+		currentUserName!.className = '';
+		commentTextArea?.removeAttribute('disabled');
+		commentTextArea?.addEventListener('input', (e) => countCharacters(e));
+		commentButton!.innerText = "Comment"
+		commentButton?.addEventListener('click', postComment)
+	};
+
+
+	setUserForComment();
+	commentFormInit()
+
+
+
 
 </script>

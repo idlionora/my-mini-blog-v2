@@ -4,6 +4,7 @@
 	--color-neutral-01: #d2daff;
 	--color-theme-blue: #aac4ff;
 	--color-theme-purple: #b1b2ff;
+	--color-theme-yellow: #dbb632;
 	--color-button-green: #b3ffae;
 	--color-button-red: #ff7d7d;
 }
@@ -115,17 +116,17 @@ body {
 	height: 2.25rem;	
 }
 
-.user-photo {
+.userimg-photo {
 	object-fit: cover;
 	object-position: center;
 }
 
-.userimg-md > .user-photo {
+.userimg-md > .userimg-photo {
 	width: 2.75rem;
 	height: 2.75rem;
 }
 
-.userimg-sm > .user-photo {
+.userimg-sm > .userimg-photo {
 	width: 2.5rem;
 	height: 2.5rem;
 }

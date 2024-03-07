@@ -86,7 +86,7 @@
     line-height: 1.75rem;
     letter-spacing: 0.025em;
     border-radius: 0.5rem;
-    filter: drop-shadow(4px 4px 0 #dbb632);
+    filter: drop-shadow(4px 4px 0 var(--color-theme-yellow));
     position: relative;
     transform: translateX(-1px);
 }
@@ -98,7 +98,7 @@
 }
 
 .auth-button:hover {
-    background-color: #dbb632;
+    background-color: var(--color-theme-yellow);
     color: white;    
     filter: drop-shadow(2px 2px 0 #4267b2);
     transform: translateX(-0px);
