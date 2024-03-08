@@ -93,7 +93,7 @@ commentDateTest = new Intl.DateTimeFormat('en-US', commentDateOptions).format(co
 					<h2 class="font-heading text-lg font-bold tracking-wider">Comments</h2>
 					<div class="w-full h-[0.2rem] bg-theme-purple mb-3"/>
 					<div class="absolute top-0 right-0 translate-y-[-1rem] pagination-container">
-						<button id="pagination-arrow-left" class="button-pagination rounded-l" disabled={true}>←</button>
+						<button type="button" id="pagination-arrow-left" class="button-pagination rounded-l" disabled={true}>←</button>
 						<div id="pagination-number-container" class="flex items-center">
 							<button class="button-pagination">1</button>
 							<button class="button-pagination-selected">2</button>
@@ -153,6 +153,10 @@ commentDateTest = new Intl.DateTimeFormat('en-US', commentDateOptions).format(co
 	// fetchExploreCards({tagString, excludedId: currentBlogId, cardContainer: expCardContainer, fetchingMessage: exploreFetchMesage});
 </script>
 <script>
+	import axios from 'axios';
+
+	const blogpostArticle = document.getElementById('blogpost-article')
+	const currentBlogId = blogpostArticle?.dataset.blogid;
 	const currentUserImg= document.getElementById('comment-current-userimg');
 	const currentUserName = document.getElementById('comment-current-username');
 	const commentTextArea = document.getElementById('comment-textarea') as HTMLTextAreaElement;
@@ -162,15 +166,28 @@ commentDateTest = new Intl.DateTimeFormat('en-US', commentDateOptions).format(co
 	let commentJWT:string | undefined;
 	let commentUserInfo:{id:string; name:string; photo:string} | undefined;
 
-	function countCharacters(event : Event) {
-		const target = event.target as HTMLTextAreaElement
-		// commentCount!.innerText 
-		if (target && commentCount) commentCount.innerText = (1000 - target.value.length).toString()
-
+	function countCharacters(event : Event, numberDisplay: HTMLElement | null) {
+		const target = event.target as HTMLTextAreaElement;
+		if (target && numberDisplay) numberDisplay.innerText = (1000 - target.value.length).toString();
 	}
 
-	function postComment() {
-		
+	async function postComment(event: Event, blogId:string | undefined, message: string) {
+		event.preventDefault();
+		if (!blogId) return;
+
+		let userJWT = localStorage.getItem('user_jwt');
+		if (userJWT) userJWT = JSON.parse(userJWT).value;
+
+		try {
+			const headers = {'Authorization': `Bearer ${userJWT}`}
+			await axios.post(`${import.meta.env.PUBLIC_APISITE}/blogposts/${blogId}/comments`, {
+				comment: message
+			}, {headers});
+
+		} catch(err) {
+			console.log(err);
+			alert('Failed to post your comment. Please try again later.')
+		}
 	}
 
 	const setUserForComment = () => {
@@ -210,16 +227,11 @@ commentDateTest = new Intl.DateTimeFormat('en-US', commentDateOptions).format(co
 		currentUserName!.innerText = commentUserInfo!.name;
 		currentUserName!.className = '';
 		commentTextArea?.removeAttribute('disabled');
-		commentTextArea?.addEventListener('input', (e) => countCharacters(e));
+		commentTextArea?.addEventListener('input', (e) => countCharacters(e, commentCount));
 		commentButton!.innerText = "Comment"
-		commentButton?.addEventListener('click', postComment)
+		commentButton?.addEventListener('click', (e) => postComment(e, currentBlogId, commentTextArea.value))
 	};
-
 
 	setUserForComment();
 	commentFormInit()
-
-
-
-
 </script>
