@@ -14,25 +14,25 @@ const commentDateOptions: Intl.DateTimeFormatOptions = {
 const dateDisplay = new Intl.DateTimeFormat('en-US', commentDateOptions).format(commentDate);
 ---
 
-<div class="w-full overflow-hidden bg-white rounded-lg border-[#e5e7eb]">
-    <div class="w-full bg-theme-purple p-2">
+<div class="commentcard-main">
+    <div class="commentcard-bar">
         <div class="flex items-center">
             <div class="userimg-container userimg-md mr-2 ml-0.5">
                 <img src={`${import.meta.env.PUBLIC_IMG_HOST}${commentUserPhoto}`} alt={`${commentUserName.split(" ")[0]}'s photo'`} class="userimg-photo">
             </div>
-            <div class="w-full flex flex-col sm:flex-row sm:items-center sm:justify-between">
+            <div class="commentcard-bar-text">
                 <p>{commentUserName}</p>
-                <p class="text-sm">{dateDisplay}</p>
+                <p class="card-text-sm">{dateDisplay}</p>
             </div>
         </div>
     </div>
-    <div class="w-full min-h-36 p-4 pb-3">
-        <div id="comment-content" class="w-full pb-3">
+    <div class="commentcard-textbox">
+        <div id="comment-content" class="commentcard-content">
             {commentContent}
         </div>
-        {isLoggedIn ? <div class="w-full flex items-center justify-end gap-3.5">
-            <button id={`button-edit-${commentId}`} class="button-comment min-w-16 bg-button-green">Edit</button>
-            <button id={`button-delete-${commentId}`} class="button-comment min-w-16 bg-button-red">Delete</button>
+        {isLoggedIn ? <div class="commentcard-button-box">
+            <button id={`button-edit-${commentId}`} class="button-comment button-comment-green">Edit</button>
+            <button id={`button-delete-${commentId}`} class="button-comment button-comment-red">Delete</button>
         </div> : ""}
     </div>
 </div>
