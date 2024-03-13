@@ -1,5 +1,5 @@
 ---
-id: 65d1f701cdf5b817ea64f3bb
+id: 65d9e3f8fdad0f5d936c3660
 title: Journaling = Rubberducking<br />Our Mind
 summary: I'd like to think that our minds are processing systems with powerful algorithm to recognize pattern.<br/><br/>Sometimes it learns to jump into the wrong conclusions and delivers us to a scary place that is difficult to claw from.
 slug: journaling-rubberducking-our-mind

@@ -175,7 +175,8 @@ body {
 }
 
 .button-pagination-dots {
-	font-weight: 600;
+	font-weight: 400;
+	padding: 0.35rem 0.635rem;
 }
 
 .button-pagination:hover {

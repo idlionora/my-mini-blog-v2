@@ -17,10 +17,10 @@ async function mapExploreCards(idArr:string[], cardContainer:HTMLElement | null)
 	const cardsInsert = cardsData.map((cardData: ExploreCardData, index: number) => {
 		return exploreCard({ cardData, index });
 	});
-	const parserdCards = new DOMParser().parseFromString(cardsInsert.join(''), 'text/html').body;
+	const parsedCards = new DOMParser().parseFromString(cardsInsert.join(''), 'text/html').body;
 
     if (cardContainer) {
-        cardContainer.innerHTML = parserdCards.innerHTML;
+        cardContainer.innerHTML = parsedCards.innerHTML;
     }
 }
 
