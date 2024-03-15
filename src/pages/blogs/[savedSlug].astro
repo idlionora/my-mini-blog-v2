@@ -32,7 +32,7 @@ const {id, title, summary, slug, blogpostImg, blogthumbImg, bannerImg, content, 
 </script>
 <script>
 	import axios from 'axios';
-	import CommentSection from '@scripts/commentCardFunctions';
+	import CommentSection, {switchToTabNum} from '@scripts/commentCardFunctions';
 
 	const blogpostArticle = document.getElementById('blogpost-article')
 	const currentBlogId = blogpostArticle?.dataset.blogid;
@@ -117,11 +117,17 @@ const {id, title, summary, slug, blogpostImg, blogthumbImg, bannerImg, content, 
 	// COMMENT CARDS FUNCTIONS
 
 	const commentContainer = document.getElementById('comment-container');
-	const paginationContainer = document.getElementById('pagination-number-container');
+	const paginationContainer = document.getElementById('pagination-container');
 
-	const blogComments = new CommentSection(currentBlogId!, commentContainer!, paginationContainer!)
-	await blogComments.fetchComments()
-	// blogComments.displayPageNums()
+	const blogComments = new CommentSection(currentBlogId!, paginationContainer!, commentContainer!);
 
+	const paginationInit = async (tabJump: "first" | "last" = "first") => {
+		await blogComments.buildPagination(tabJump);
+		paginationContainer?.children[0].addEventListener('click', () => switchToTabNum(blogComments, blogComments.currentTab - 1));
+		paginationContainer?.children[2].addEventListener('click', () => switchToTabNum(blogComments, blogComments.currentTab + 1));
+		document.getElementById('pagination-first')?.addEventListener('click', () => switchToTabNum(blogComments, 1));
+		document.getElementById('pagination-last')?.addEventListener('click', () => switchToTabNum(blogComments, blogComments.commentTabNum));
+	}
 
+	paginationInit("last")
 </script>
