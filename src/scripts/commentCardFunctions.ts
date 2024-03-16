@@ -1,4 +1,5 @@
 import axios, { AxiosError } from "axios";
+import commentCard, {type CommentCardInput} from "@scripts/commentCard";
 
 interface CommentBlogpostInfo {
     _id: string;
@@ -31,15 +32,22 @@ class CommentSection {
 	commentContainer: HTMLElement;
 
 	protected fetchedComments: CommentData[] = [];
-	commentNumPerTab: number = 5;
+	commentNumPerTab: number = 10;
 	commentTabNum: number = 1;
 	currentTab: number = 1;
+	protected loggedinUserId: string;
 
-	constructor(blogId: string, paginationContainer: HTMLElement, commentContainer: HTMLElement) {
+	constructor(
+		blogId: string,
+		paginationContainer: HTMLElement,
+		commentContainer: HTMLElement,
+		loggedinUserId: string
+	) {
 		this.blogId = blogId;
 		this.paginationContainer = paginationContainer;
 		this.paginationNumContainer = paginationContainer.children[1] as HTMLElement;
 		this.commentContainer = commentContainer;
+		this.loggedinUserId = loggedinUserId;
 	}
 
 	async fetchComments() {
@@ -93,25 +101,46 @@ class CommentSection {
 		}
 	}
 
-	async buildPagination(tabJump: "first" | "last" = "first") {
-		await this.fetchComments();
-        if (tabJump === "first") {
-            this.currentTab = 1;
-        } else if (tabJump === "last") {
-            this.currentTab = this.commentTabNum;
-        }
-		this.displayPageNums();
-		this.assignDisabledButtons();
-        //displayComments()
+	displayComments() {
+		const commentsInTab = this.fetchedComments.slice(
+			this.commentNumPerTab * (this.currentTab - 1),
+			this.commentNumPerTab * this.currentTab
+		);
+		const commentInsert = commentsInTab.map((commentData: CommentData, index: number) => {
+			const { _id, comment, createdAt, user } = commentData;
+			const cardData: CommentCardInput = {
+				commentId: _id,
+				commentUserName: user.name,
+				commentUserPhoto: user.photo,
+				commentDate: createdAt,
+				commentString: comment,
+				isLoggedIn: this.loggedinUserId === user._id,
+			};
+			return commentCard(cardData, index)
+		});
+		const parsedCards = new DOMParser().parseFromString(commentInsert.join(''), "text/html").body;
+		console.log(parsedCards)
+		this.commentContainer.innerHTML = parsedCards.innerHTML;
 	}
 
-    loadTabNum(newTabNum: number) {
+	async buildPagination(tabJump: 'first' | 'last' = 'first') {
+		await this.fetchComments();
+		if (tabJump === 'first') {
+			this.currentTab = 1;
+		} else if (tabJump === 'last') {
+			this.currentTab = this.commentTabNum;
+		}
+		this.displayPageNums();
+		this.assignDisabledButtons();
+		this.displayComments();
+	}
+
+	loadTabNum(newTabNum: number) {
 		this.currentTab = newTabNum;
 		this.displayPageNums();
 		this.assignDisabledButtons();
-		//displayComments()
+		this.displayComments()
 	}
-
 }
 
 export default CommentSection;

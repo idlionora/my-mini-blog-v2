@@ -118,8 +118,9 @@ const {id, title, summary, slug, blogpostImg, blogthumbImg, bannerImg, content, 
 
 	const commentContainer = document.getElementById('comment-container');
 	const paginationContainer = document.getElementById('pagination-container');
+	const loggedinUserId = commentUserInfo?.id || "00"
 
-	const blogComments = new CommentSection(currentBlogId!, paginationContainer!, commentContainer!);
+	const blogComments = new CommentSection(currentBlogId!,  paginationContainer!, commentContainer!, loggedinUserId);
 
 	const paginationInit = async (tabJump: "first" | "last" = "first") => {
 		await blogComments.buildPagination(tabJump);
@@ -129,5 +130,6 @@ const {id, title, summary, slug, blogpostImg, blogthumbImg, bannerImg, content, 
 		document.getElementById('pagination-last')?.addEventListener('click', () => switchToTabNum(blogComments, blogComments.commentTabNum));
 	}
 
-	paginationInit("last")
+	paginationInit()
+
 </script>

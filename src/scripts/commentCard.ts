@@ -1,4 +1,4 @@
-interface CommentCardInput {
+export interface CommentCardInput {
     commentId: string;
     commentUserName: string;
     commentUserPhoto: string;
@@ -7,7 +7,8 @@ interface CommentCardInput {
     isLoggedIn: boolean;
 }
 
-const commentCard = ({commentId, commentUserName, commentUserPhoto, commentDate, commentString, isLoggedIn}: CommentCardInput) => {
+const commentCard = (cardData:CommentCardInput, index:number) => {
+    const {commentId, commentUserName, commentUserPhoto, commentDate, commentString, isLoggedIn} = cardData;
 
     const commentDateOptions: Intl.DateTimeFormatOptions = {
 		weekday: 'short',
@@ -24,7 +25,7 @@ const commentCard = ({commentId, commentUserName, commentUserPhoto, commentDate,
 
     const parsedContent = new DOMParser().parseFromString(commentString, 'text/html').body.innerText;
 
-    return `<div class="commentcard-main"><div class="commentcard-bar"><div class="flex items-center"><div class="userimg-container userimg-md mr-2 ml-0.5"><img src="${import.meta.env.PUBLIC_IMG_HOST}${commentUserPhoto}" alt="${commentUserName.split(' ')[0]}'s photo" class="userimg-photo"></div><div class="commentcard-bar-text"><p>${commentUserName}</p><p class="card-text-sm">${dateDisplay}</p></div></div></div><div class="commentcard-textbox"><div id="comment-content" class="commentcard-content"> ${parsedContent}</div>${isLoggedIn ? `<div class="commentcard-button-box"><button id="button-edit-${commentId}" class="button-comment button-comment-green">Edit</button><button id="button-delete-${commentId}" class="button-comment button-comment-red">Delete</button></div>` : ''}</div></div>`;
+    return `<div class="commentcard-main"><div class="commentcard-bar"><div class="flex items-center"><div class="userimg-container userimg-md mr-2 ml-0.5"><img src="${import.meta.env.PUBLIC_IMG_HOST}${commentUserPhoto}" alt="${commentUserName.split(' ')[0]}'s photo" class="userimg-photo"></div><div class="commentcard-bar-text"><p>${commentUserName}</p><p class="card-text-sm">${dateDisplay}</p></div></div></div><div class="commentcard-textbox"><div id="comment-content-${index}" class="commentcard-content"> ${parsedContent}</div>${isLoggedIn ? `<div id="button-comment-container-${index}" class="commentcard-button-box" data-commentId="${commentId}" data-commentIndex="${index}"><button id="button-edit-${index}" class="button-comment button-comment-green">Edit</button><button id="button-delete-${index}" class="button-comment button-comment-red">Delete</button></div>` : ''}</div></div>`;
 }
 
 export default commentCard;
