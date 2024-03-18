@@ -1,5 +1,6 @@
 import axios, { AxiosError } from "axios";
 import commentCard, {type CommentCardInput} from "@scripts/commentCard";
+import { commentTextarea } from "@scripts/commentCardInsert";
 
 interface CommentBlogpostInfo {
     _id: string;
@@ -16,13 +17,51 @@ export interface CommentData {
     user: {_id: string, name: string, photo: string}
 }
 
+const cancelEditComment = (index: number, commentId: string) => {
+	console.log("cancel button is clicked!!")
+};
+
+const confirmEditComment = (index: number, commentId: string) => {
+	console.log("confirm button is clicked!!")
+};
+
+export const deleteComment = (index: number, commentId: string) => {
+	console.log("delete button is clicked!!")
+}
+
+export const insertCommentTextarea = (index: number, commentId: string) => {
+	document.getElementById(`button-edit-${index}`)?.removeEventListener('click', () => insertCommentTextarea(index, commentId));
+	document
+		.getElementById(`button-delete-${index}`)
+		?.removeEventListener('click', () => deleteComment(index, commentId));
+
+	const commentTextbox = document.getElementById(`comment-textbox-${index}`);
+	const savedComment = commentTextbox?.dataset.savedcomment || '';
+	commentTextbox!.className = 'commentcard-textbox edit';
+
+	const textareaInsert = commentTextarea(index, commentId);
+	const parsedInsert = new DOMParser().parseFromString(textareaInsert, 'text/html').body;
+	commentTextbox!.innerHTML = parsedInsert.innerHTML;
+	const insertedTextarea = document.getElementById(`comment-textarea-${index}`) as HTMLTextAreaElement;
+	insertedTextarea.value = savedComment;
+
+	document.getElementById(`comment-cancel-${index}`)?.addEventListener('click', () => cancelEditComment(index, commentId));
+	document.getElementById(`comment-confirm-${index}`)?.addEventListener('click', () => confirmEditComment(index, commentId));
+}
+
 export async function switchToTabNum(commentClass:CommentSection, newTabNum:number) {
+	document.getElementById('pagination-first')?.removeEventListener('click', () => switchToTabNum(commentClass, 1));
+	document
+		.getElementById('pagination-last')
+		?.removeEventListener('click', () =>
+			switchToTabNum(commentClass, commentClass.commentTabNum)
+		);
     commentClass.loadTabNum(newTabNum);
     document.getElementById('pagination-first')?.addEventListener('click', () => switchToTabNum(commentClass, 1));
     document
 		.getElementById('pagination-last')
 		?.addEventListener('click', () => switchToTabNum(commentClass, commentClass.commentTabNum));
-    //handle addEventListener for edit and delete button    
+    //add eventListener for edit and delete button    
 }
 
 class CommentSection {
@@ -32,7 +71,7 @@ class CommentSection {
 	commentContainer: HTMLElement;
 
 	protected fetchedComments: CommentData[] = [];
-	commentNumPerTab: number = 10;
+	commentNumPerTab: number = 5;
 	commentTabNum: number = 1;
 	currentTab: number = 1;
 	protected loggedinUserId: string;
@@ -119,7 +158,6 @@ class CommentSection {
 			return commentCard(cardData, index)
 		});
 		const parsedCards = new DOMParser().parseFromString(commentInsert.join(''), "text/html").body;
-		console.log(parsedCards)
 		this.commentContainer.innerHTML = parsedCards.innerHTML;
 	}
 

@@ -32,7 +32,8 @@ const {id, title, summary, slug, blogpostImg, blogthumbImg, bannerImg, content, 
 </script>
 <script>
 	import axios from 'axios';
-	import CommentSection, {switchToTabNum} from '@scripts/commentCardFunctions';
+	import CommentSection, {insertCommentTextarea, switchToTabNum, deleteComment} from '@scripts/commentCardFunctions';
+	import commentCard, {type CommentCardInput} from '@scripts/commentCard';
 
 	const blogpostArticle = document.getElementById('blogpost-article')
 	const currentBlogId = blogpostArticle?.dataset.blogid;
@@ -60,7 +61,7 @@ const {id, title, summary, slug, blogpostImg, blogthumbImg, bannerImg, content, 
 		try {
 			const headers = {'Authorization': `Bearer ${userJWT}`}
 			await axios.post(`${import.meta.env.PUBLIC_APISITE}/blogposts/${blogId}/comments`, {
-				comment: message
+				comment: message, createdAt: Date.now()
 			}, {headers});
 
 		} catch(err) {
@@ -130,6 +131,23 @@ const {id, title, summary, slug, blogpostImg, blogthumbImg, bannerImg, content, 
 		document.getElementById('pagination-last')?.addEventListener('click', () => switchToTabNum(blogComments, blogComments.commentTabNum));
 	}
 
-	paginationInit()
+	// paginationInit()
+
+	//testingcard
+	const testCommentData: CommentCardInput = {
+		commentId: '655c7a2bd2ffdd11ea492d1c',
+		commentUserName: 'Barry T. Quokka',
+		commentUserPhoto: '/v1710613086/my-mini-blog/user/profile-655c7a2bd2ffdd11ea492d1c.jpg',
+		commentDate: '2024-03-13T08:53:44.065+00:00',
+		commentString: 'we asked the neighborhood housewives to prepare food for 2 meals and 4 times of snacks… we borrowed the scanner-printer from our local professor (who is actually our lil committee’s number one leader. Hush hush), and then! We bought individual name stamps that all in all had exhausted the office stationary budget already…',
+		isLoggedIn: true
+	}
+	const commmentTabInsert = commentCard(testCommentData, 0)
+	const testParsedComment = new DOMParser().parseFromString(commmentTabInsert, 'text/html').body;
+	commentContainer!.innerHTML = testParsedComment.innerHTML;
+
+	document.getElementById(`button-edit-0`)?.addEventListener('click', () => insertCommentTextarea(0, testCommentData.commentId));
+	document.getElementById(`button-delete-0`)?.addEventListener('click', () => deleteComment(0, testCommentData.commentId))
+
 
 </script>
