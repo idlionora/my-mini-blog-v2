@@ -33,9 +33,7 @@ const {id, title, summary, slug, blogpostImg, blogthumbImg, bannerImg, content, 
 <script>
 	import axios from 'axios';
 	import CommentSection from '@scripts/commentSectionClass';
-	import { commentSectionInit } from '@scripts/commentCardFunctions';
-	import commentCard, {type CommentCardInput} from '@scripts/commentCard';
-
+	
 	const blogpostArticle = document.getElementById('blogpost-article')
 	const currentBlogId = blogpostArticle?.dataset.blogid;
 	const currentUserImg= document.getElementById('comment-current-userimg');
@@ -123,9 +121,50 @@ const {id, title, summary, slug, blogpostImg, blogthumbImg, bannerImg, content, 
 	const loggedinUserId = commentUserInfo?.id || "00"
 
 	const blogComments = new CommentSection(currentBlogId!,  paginationContainer!, commentContainer!, loggedinUserId);
-	commentSectionInit(blogComments);
+	await blogComments.buildPagination();
 
+	function addPageNumListeners() {
+		document.getElementById('pagination-first')?.addEventListener('click', switchToFirstTab);
+		document.getElementById('pagination-last')?.addEventListener('click', switchToLastTab);
+	}
+
+	function removePageNumListener() {
+		document.getElementById('pagination-first')?.removeEventListener('click', switchToFirstTab);
+		document.getElementById('pagination-last')?.removeEventListener('click', switchToLastTab);
+		console.log('remove runs!')
+	}
+
+	const switchToTabNum = (newTabNum: number) => {
+		removePageNumListener()
+		blogComments.loadTabNum(newTabNum);
+		addPageNumListeners()		
+	}	
+
+	function switchToPrevTab() {
+		switchToTabNum(blogComments.currentTab - 1);
+	}
+	function switchToNextTab() {
+		switchToTabNum(blogComments.currentTab + 1);
+	}  
+	function switchToFirstTab() {
+		switchToTabNum(1)
+	}
+	function switchToLastTab() {
+		switchToTabNum(blogComments.commentTabNum)
+	}
 	
+	blogComments.paginationContainer.children[0].addEventListener('click', switchToPrevTab);
+	blogComments.paginationContainer.children[2].addEventListener('click', switchToNextTab);
+	addPageNumListeners()
+
+	// testing removePageNumListener
+	function testRemoveListener() {
+		removePageNumListener();
+		console.log('should be removed now')
+	}
+	document.getElementById('explore-card-container')?.addEventListener('click', testRemoveListener)
+
+
 	//testingcard
 
 	// const testCommentData: CommentCardInput = {

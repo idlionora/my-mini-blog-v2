@@ -1,19 +1,19 @@
-import axios, { AxiosError } from "axios";
-import commentCard, {type CommentCardInput} from "@scripts/commentCard";
+import axios, { AxiosError } from 'axios';
+import commentCard, { type CommentCardInput } from '@scripts/commentCard';
 
 interface CommentBlogpostInfo {
-    _id: string;
-    title: string;
-    user: {_id: string, name: string};
+	_id: string;
+	title: string;
+	user: { _id: string; name: string };
 }
 
 export interface CommentData {
-    _id: string;
-    comment: string;
-    createdAt: string;
-    updatedAt: string;
-    blogpost: CommentBlogpostInfo;
-    user: {_id: string, name: string, photo: string}
+	_id: string;
+	comment: string;
+	createdAt: string;
+	updatedAt: string;
+	blogpost: CommentBlogpostInfo;
+	user: { _id: string; name: string; photo: string };
 }
 
 class CommentSection {
@@ -107,9 +107,12 @@ class CommentSection {
 				commentString: comment,
 				isLoggedIn: this.loggedinUserId === user._id,
 			};
-			return commentCard(cardData, index)
+			return commentCard(cardData, index);
 		});
-		const parsedCards = new DOMParser().parseFromString(commentInsert.join(''), "text/html").body;
+		const parsedCards = new DOMParser().parseFromString(
+			commentInsert.join(''),
+			'text/html'
+		).body;
 		this.commentContainer.innerHTML = parsedCards.innerHTML;
 	}
 
@@ -129,8 +132,9 @@ class CommentSection {
 		this.currentTab = newTabNum;
 		this.displayPageNums();
 		this.assignDisabledButtons();
-		this.displayComments()
+		this.displayComments();
 	}
 }
+
 
 export default CommentSection;
