@@ -1,5 +1,6 @@
+import type { FunctionExpression } from 'typescript';
 import CommentSection from './commentSectionClass';
-import { commentTextarea } from '@scripts/commentCardInsert';
+import { commentEditArea } from '@scripts/commentCardInsert';
 
 function cancelEditComment(index: string, commentId: string) {
 	console.log('cancel button is clicked!!');
@@ -26,7 +27,7 @@ function insertCommentTextarea(index: string, commentId: string) {
 	const savedComment = commentTextbox?.dataset.savedcomment || '';
 	commentTextbox!.className = 'commentcard-textbox edit';
 
-	const textareaInsert = commentTextarea(index, commentId);
+	const textareaInsert = commentEditArea(index, commentId);
 	const parsedInsert = new DOMParser().parseFromString(textareaInsert, 'text/html').body;
 	commentTextbox!.innerHTML = parsedInsert.innerHTML;
 	const insertedTextarea = document.getElementById(
@@ -122,7 +123,7 @@ export function switchToTabNum(commentClass: CommentSection, newTabNum: number) 
 
 export async function commentSectionInit(
 	commentClass: CommentSection,
-	tabJump: 'first' | 'last' = 'first'
+	tabJump: number
 ) {
 	await commentClass.buildPagination(tabJump);
 	// commentClass.paginationContainer.children[0].addEventListener(

@@ -33,7 +33,9 @@ const {id, title, summary, slug, blogpostImg, blogthumbImg, bannerImg, content, 
 <script>
 	import axios from 'axios';
 	import CommentSection from '@scripts/commentSectionClass';
-	
+	import { commentEditArea } from '@scripts/commentCardInsert';
+
+	// COMMENT FORM INITIALIZATION //	
 	const blogpostArticle = document.getElementById('blogpost-article')
 	const currentBlogId = blogpostArticle?.dataset.blogid;
 	const currentUserImg= document.getElementById('comment-current-userimg');
@@ -114,8 +116,8 @@ const {id, title, summary, slug, blogpostImg, blogthumbImg, bannerImg, content, 
 	setUserForComment();
 	commentFormInit()
 
-	// COMMENT CARDS FUNCTIONS
-
+	// COMMENT CARDS FUNCTIONS //
+	// PAGINATION TABS
 	const commentContainer = document.getElementById('comment-container');
 	const paginationContainer = document.getElementById('pagination-container');
 	const loggedinUserId = commentUserInfo?.id || "00"
@@ -131,14 +133,7 @@ const {id, title, summary, slug, blogpostImg, blogthumbImg, bannerImg, content, 
 	function removePageNumListener() {
 		document.getElementById('pagination-first')?.removeEventListener('click', switchToFirstTab);
 		document.getElementById('pagination-last')?.removeEventListener('click', switchToLastTab);
-		console.log('remove runs!')
 	}
-
-	const switchToTabNum = (newTabNum: number) => {
-		removePageNumListener()
-		blogComments.loadTabNum(newTabNum);
-		addPageNumListeners()		
-	}	
 
 	function switchToPrevTab() {
 		switchToTabNum(blogComments.currentTab - 1);
@@ -152,17 +147,93 @@ const {id, title, summary, slug, blogpostImg, blogthumbImg, bannerImg, content, 
 	function switchToLastTab() {
 		switchToTabNum(blogComments.commentTabNum)
 	}
+
+	const switchToTabNum = (newTabNum: number) => {
+		removePageNumListener()
+		blogComments.loadTabNum(newTabNum);
+		addPageNumListeners()		
+	}
 	
-	blogComments.paginationContainer.children[0].addEventListener('click', switchToPrevTab);
-	blogComments.paginationContainer.children[2].addEventListener('click', switchToNextTab);
+	function addPageArrowListeners() {
+		blogComments.paginationContainer.children[0].addEventListener('click', switchToPrevTab);
+		blogComments.paginationContainer.children[2].addEventListener('click', switchToNextTab);
+	}
+	
+	function removePageArrowListener() {
+		blogComments.paginationContainer.children[0].removeEventListener('click', switchToPrevTab);
+		blogComments.paginationContainer.children[2].removeEventListener('click', switchToNextTab);
+	}
+
+	addPageArrowListeners()
 	addPageNumListeners()
 
-	// testing removePageNumListener
-	function testRemoveListener() {
-		removePageNumListener();
-		console.log('should be removed now')
+	// COMMENT CARD BUTTONS
+	interface CommentListenerObj {
+	[keyIndex: string]: () => void
+}
+	let buttonListeners: CommentListenerObj = {};
+
+	const registerListeners = () => {
+		const commentButtonBoxes = Array.from(document.getElementsByClassName('commentcard-button-box')) as HTMLElement[];
+
+		commentButtonBoxes.forEach((buttonBox) => {
+			const commentIndex = buttonBox.dataset.commentindex || '';
+			const commentId = buttonBox.dataset.commentid || '';
+
+			buttonListeners[`edit${commentIndex}`] = () => insertCommentTextarea(commentIndex, commentId);
+			buttonListeners[`delete${commentIndex}`] = () => deleteComment(commentIndex, commentId);
+			buttonListeners[`cancel${commentIndex}`] = () => cancelEditComment(commentIndex, commentId);
+			buttonListeners[`confirm${commentIndex}`] = () => confirmEditComment(commentIndex, commentId)
+		})
 	}
-	document.getElementById('explore-card-container')?.addEventListener('click', testRemoveListener)
+	
+	function insertCommentTextarea(index: string, commentId: string) {
+		if (index.length === 0 || commentId.length === 0) return;
+		
+		document.getElementById(`button-edit-${index}`)?.removeEventListener('click', buttonListeners[`edit${index}`]);
+		document.getElementById(`button-delete-${index}`)?.removeEventListener('click', buttonListeners[`delete${index}`]);
+
+		const commentTextbox = document.getElementById(`comment-textbox-${index}`);
+		const savedComment = commentTextbox?.dataset.savedcomment || '';
+		commentTextbox!.className = 'commentcard-textbox edit';
+
+		const textareaInsert = commentEditArea(index, commentId);
+		const parsedInsert = new DOMParser().parseFromString(textareaInsert, 'text/html').body;
+		commentTextbox!.innerHTML = parsedInsert.innerHTML;
+		const insertedTextarea = document.getElementById(
+			`comment-textarea-${index}`
+		) as HTMLTextAreaElement;
+		insertedTextarea.value = savedComment;
+
+		document.getElementById(`comment-cancel-${index}`)?.addEventListener('click', buttonListeners[`cancel${index}`]);
+		document.getElementById(`comment-confirm-${index}`)?.addEventListener('click', buttonListeners[`confirm${index}`]);
+	}
+
+	function cancelEditComment(index: string, commentId: string) {
+		console.log('cancel button is clicked!!');
+	}
+
+	function confirmEditComment(index: string, commentId: string) {
+		console.log('confirm button is clicked!!');
+	}
+
+	function deleteComment(index: string, commentId: string) {
+		console.log('delete button is clicked!!');
+	}
+
+	function addCommentButtonListeners() {
+		const commentButtonBoxes = Array.from(document.getElementsByClassName('commentcard-button-box')) as HTMLElement[];
+
+		commentButtonBoxes.forEach((buttonBox) => {
+			const commentIndex = buttonBox.dataset.commentindex || '';
+
+			buttonBox.children[0].addEventListener('click', buttonListeners[`edit${commentIndex}`]);
+			buttonBox.children[1].addEventListener('click', buttonListeners[`edit${commentIndex}`]);
+		})
+	}
+
+	registerListeners();
+	addCommentButtonListeners();
 
 
 	//testingcard

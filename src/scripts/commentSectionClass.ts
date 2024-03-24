@@ -116,13 +116,9 @@ class CommentSection {
 		this.commentContainer.innerHTML = parsedCards.innerHTML;
 	}
 
-	async buildPagination(tabJump: 'first' | 'last' = 'first') {
+	async buildPagination(tabJump: number = 1) {
 		await this.fetchComments();
-		if (tabJump === 'first') {
-			this.currentTab = 1;
-		} else if (tabJump === 'last') {
-			this.currentTab = this.commentTabNum;
-		}
+		this.currentTab = tabJump;
 		this.displayPageNums();
 		this.assignDisabledButtons();
 		this.displayComments();
