@@ -116,15 +116,19 @@ class CommentSection {
 		this.commentContainer.innerHTML = parsedCards.innerHTML;
 	}
 
-	async buildPagination(tabJump: number = 1) {
+	async buildPagination(tabJump: number | 'persist' | 'last' = 1) {
 		await this.fetchComments();
-		this.currentTab = tabJump;
+		if (typeof tabJump === "number") {
+			this.currentTab = tabJump;
+		} else if (tabJump === 'last' || this.currentTab > this.commentTabNum) {
+			this.currentTab = this.commentTabNum;
+		} 
 		this.displayPageNums();
 		this.assignDisabledButtons();
 		this.displayComments();
 	}
 
-	loadTabNum(newTabNum: number) {
+	loadTabNum(newTabNum: number = 1) {
 		this.currentTab = newTabNum;
 		this.displayPageNums();
 		this.assignDisabledButtons();

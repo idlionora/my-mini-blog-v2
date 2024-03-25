@@ -33,7 +33,7 @@ const {id, title, summary, slug, blogpostImg, blogthumbImg, bannerImg, content, 
 <script>
 	import axios from 'axios';
 	import CommentSection from '@scripts/commentSectionClass';
-	import { commentEditArea } from '@scripts/commentCardInsert';
+	import { commentEditArea, commentContent } from '@scripts/commentCard';
 
 	// COMMENT FORM INITIALIZATION //	
 	const blogpostArticle = document.getElementById('blogpost-article')
@@ -54,7 +54,7 @@ const {id, title, summary, slug, blogpostImg, blogthumbImg, bannerImg, content, 
 
 	async function postComment(event: Event, blogId:string | undefined, message: string) {
 		event.preventDefault();
-		if (!blogId) return;
+		if (!blogId || blogId.length < 1) return;
 
 		let userJWT = localStorage.getItem('user_jwt');
 		if (userJWT) userJWT = JSON.parse(userJWT).value;
@@ -130,7 +130,7 @@ const {id, title, summary, slug, blogpostImg, blogthumbImg, bannerImg, content, 
 		document.getElementById('pagination-last')?.addEventListener('click', switchToLastTab);
 	}
 
-	function removePageNumListener() {
+	function removePageNumListeners() {
 		document.getElementById('pagination-first')?.removeEventListener('click', switchToFirstTab);
 		document.getElementById('pagination-last')?.removeEventListener('click', switchToLastTab);
 	}
@@ -149,9 +149,23 @@ const {id, title, summary, slug, blogpostImg, blogthumbImg, bannerImg, content, 
 	}
 
 	const switchToTabNum = (newTabNum: number) => {
-		removePageNumListener()
+		removePageNumListeners();
+		removeCommentButtonListeners();
 		blogComments.loadTabNum(newTabNum);
-		addPageNumListeners()		
+		addPageNumListeners();
+		registerButtonListeners()
+		addCommentButtonListeners()		
+	}
+
+	const reloadCommentSection = async (tabJump: number | 'persist' | 'last' = 1) => {
+		removePageArrowListeners();
+		removePageNumListeners();
+		removeCommentButtonListeners();
+		await blogComments.buildPagination(tabJump);
+		addPageArrowListeners();
+		addPageNumListeners();
+		registerButtonListeners();
+		addCommentButtonListeners();
 	}
 	
 	function addPageArrowListeners() {
@@ -159,7 +173,7 @@ const {id, title, summary, slug, blogpostImg, blogthumbImg, bannerImg, content, 
 		blogComments.paginationContainer.children[2].addEventListener('click', switchToNextTab);
 	}
 	
-	function removePageArrowListener() {
+	function removePageArrowListeners() {
 		blogComments.paginationContainer.children[0].removeEventListener('click', switchToPrevTab);
 		blogComments.paginationContainer.children[2].removeEventListener('click', switchToNextTab);
 	}
@@ -172,23 +186,28 @@ const {id, title, summary, slug, blogpostImg, blogthumbImg, bannerImg, content, 
 	[keyIndex: string]: () => void
 }
 	let buttonListeners: CommentListenerObj = {};
+	let commentButtonBoxes: HTMLElement[];
 
-	const registerListeners = () => {
-		const commentButtonBoxes = Array.from(document.getElementsByClassName('commentcard-button-box')) as HTMLElement[];
+	function registerButtonBoxes() {
+		commentButtonBoxes = Array.from(document.getElementsByClassName('commentcard-button-box')) as HTMLElement[];
+	}
+
+	const registerButtonListeners = () => {
+		registerButtonBoxes();
 
 		commentButtonBoxes.forEach((buttonBox) => {
 			const commentIndex = buttonBox.dataset.commentindex || '';
 			const commentId = buttonBox.dataset.commentid || '';
 
 			buttonListeners[`edit${commentIndex}`] = () => insertCommentTextarea(commentIndex, commentId);
-			buttonListeners[`delete${commentIndex}`] = () => deleteComment(commentIndex, commentId);
+			buttonListeners[`delete${commentIndex}`] = () => deleteComment(commentId);
 			buttonListeners[`cancel${commentIndex}`] = () => cancelEditComment(commentIndex, commentId);
 			buttonListeners[`confirm${commentIndex}`] = () => confirmEditComment(commentIndex, commentId)
 		})
 	}
 	
 	function insertCommentTextarea(index: string, commentId: string) {
-		if (index.length === 0 || commentId.length === 0) return;
+		if (index.length < 1 || commentId.length < 1) return;
 		
 		document.getElementById(`button-edit-${index}`)?.removeEventListener('click', buttonListeners[`edit${index}`]);
 		document.getElementById(`button-delete-${index}`)?.removeEventListener('click', buttonListeners[`delete${index}`]);
@@ -210,48 +229,84 @@ const {id, title, summary, slug, blogpostImg, blogthumbImg, bannerImg, content, 
 	}
 
 	function cancelEditComment(index: string, commentId: string) {
-		console.log('cancel button is clicked!!');
+		if (index.length < 1 || commentId.length < 1) return;
+
+		document.getElementById(`comment-cancel-${index}`)?.removeEventListener('click', buttonListeners[`cancel${index}`]);
+		document.getElementById(`comment-confirm-${index}`)?.removeEventListener('click', buttonListeners[`confirm${index}`]);
+
+		const commentTextbox = document.getElementById(`comment-textbox-${index}`);
+    	const savedComment = commentTextbox?.dataset.savedcomment || '';
+		commentTextbox!.className = 'commentcard-textbox';
+
+		const commentContentInsert = commentContent(index, commentId, savedComment);
+		const parsedInsert = new DOMParser().parseFromString(commentContentInsert, "text/html").body;
+		commentTextbox!.innerHTML = parsedInsert.innerHTML;
+
+		document.getElementById(`button-edit-${index}`)?.addEventListener('click', buttonListeners[`edit${index}`]);
+		document.getElementById(`button-delete-${index}`)?.addEventListener('click', buttonListeners[`delete${index}`]);
 	}
 
-	function confirmEditComment(index: string, commentId: string) {
-		console.log('confirm button is clicked!!');
+	async function confirmEditComment(index: string, commentId: string) {
+		if (!commentId || commentId.length < 1) return;
+
+		const insertedTextarea = document.getElementById(`comment-textarea-${index}`) as HTMLTextAreaElement;
+		const message = insertedTextarea.value;
+		try {
+			const headers = {'Authorization': `Bearer ${commentJWT}`};
+			await axios.patch(`${import.meta.env.PUBLIC_APISITE}/comments/${commentId}`, {comment: message, updatedAt: Date.now()}, {headers});
+			
+			const commentTextbox = document.getElementById(`comment-textbox-${index}`);
+			commentTextbox!.dataset.savedcomment = message;
+			buttonListeners[`cancel${index}`]
+		} catch(err) {
+			console.log(err);
+			alert('Failed to edit your comment. Please try again later.')
+		}
 	}
 
-	function deleteComment(index: string, commentId: string) {
-		console.log('delete button is clicked!!');
+	async function deleteComment(commentId: string) {
+		if (!commentId || commentId.length < 1) return;
+		const result = confirm('Are you sure you want to delete?');
+
+		if (result) {
+			try {
+				const headers = {'Authorization': `Bearer ${commentJWT}`};
+				await axios.delete(`${import.meta.env.PUBLIC_APISITE}/comments/${commentId}`, {headers})
+				await reloadCommentSection("persist")				
+			} catch(err) {
+				console.log(err);
+				alert('Failed to delete your comment. Please try again later.')
+			}
+		}
 	}
 
 	function addCommentButtonListeners() {
-		const commentButtonBoxes = Array.from(document.getElementsByClassName('commentcard-button-box')) as HTMLElement[];
+		registerButtonBoxes();
 
 		commentButtonBoxes.forEach((buttonBox) => {
 			const commentIndex = buttonBox.dataset.commentindex || '';
 
 			buttonBox.children[0].addEventListener('click', buttonListeners[`edit${commentIndex}`]);
-			buttonBox.children[1].addEventListener('click', buttonListeners[`edit${commentIndex}`]);
+			buttonBox.children[1].addEventListener('click', buttonListeners[`delete${commentIndex}`]);
 		})
 	}
 
-	registerListeners();
+	function removeCommentButtonListeners() {
+		registerButtonBoxes();
+
+		commentButtonBoxes.forEach((buttonBox) => {
+			const commentIndex = buttonBox.dataset.commentindex || '';
+
+			if (document.getElementById(`comment-cancel-${commentIndex}`)) {
+				buttonBox.children[0].removeEventListener('click', buttonListeners[`cancel${commentIndex}`]);
+				buttonBox.children[1].removeEventListener('click', buttonListeners[`confirm${commentIndex}`]);
+			} else {
+				buttonBox.children[0].removeEventListener('click', buttonListeners[`edit${commentIndex}`]);
+				buttonBox.children[1].removeEventListener('click', buttonListeners[`delete${commentIndex}`]);
+			}
+		})
+	}
+
+	registerButtonListeners();
 	addCommentButtonListeners();
-
-
-	//testingcard
-
-	// const testCommentData: CommentCardInput = {
-	// 	commentId: '655c7a2bd2ffdd11ea492d1c',
-	// 	commentUserName: 'Barry T. Quokka',
-	// 	commentUserPhoto: '/v1710613086/my-mini-blog/user/profile-655c7a2bd2ffdd11ea492d1c.jpg',
-	// 	commentDate: '2024-03-13T08:53:44.065+00:00',
-	// 	commentString: 'we asked the neighborhood housewives to prepare food for 2 meals and 4 times of snacks… we borrowed the scanner-printer from our local professor (who is actually our lil committee’s number one leader. Hush hush), and then! We bought individual name stamps that all in all had exhausted the office stationary budget already…',
-	// 	isLoggedIn: true
-	// }
-	// const commmentTabInsert = commentCard(testCommentData, 0)
-	// const testParsedComment = new DOMParser().parseFromString(commmentTabInsert, 'text/html').body;
-	// commentContainer!.innerHTML = testParsedComment.innerHTML;
-
-	// document.getElementById(`button-edit-0`)?.addEventListener('click', () => insertCommentTextarea(0, testCommentData.commentId));
-	// document.getElementById(`button-delete-0`)?.addEventListener('click', () => deleteComment(0, testCommentData.commentId))
-
-
 </script>

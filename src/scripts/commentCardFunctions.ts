@@ -1,6 +1,6 @@
 import type { FunctionExpression } from 'typescript';
 import CommentSection from './commentSectionClass';
-import { commentEditArea } from '@scripts/commentCardInsert';
+import { commentEditArea } from '@scripts/commentCard';
 
 function cancelEditComment(index: string, commentId: string) {
 	console.log('cancel button is clicked!!');
