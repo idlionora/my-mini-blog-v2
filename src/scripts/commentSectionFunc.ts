@@ -3,6 +3,13 @@ import CommentSection from '@scripts/commentSectionClass';
 import CommentForm from '@scripts/commentFormClass';
 import { commentEditArea, commentContent } from '@scripts/commentCard';
 
+const errorMessage = document.getElementById('main-container')?.dataset.errormessage;
+if (errorMessage) {
+	const errorObj = JSON.parse(errorMessage);
+	console.error(`${errorObj.status}: ${typeof errorObj.desc === "string"? errorObj.desc : errorObj.desc.message}`)
+	throw Error('Something went wrong!');
+}
+
 // BASIC INFO //
 const blogpostArticle = document.getElementById('blogpost-article');
 const blogId = blogpostArticle?.dataset.blogid;

@@ -1,5 +1,6 @@
 ---
 export const prerender = true;
+import MainLayout from "@layouts/MainLayout.astro"
 import BlogPage from "@components/BlogPage.astro"
 import type { GetStaticPaths, MarkdownInstance } from "astro";
 import "@styles/blogs.css"
@@ -14,9 +15,11 @@ export const getStaticPaths =(async () => {
 	}})
 }) satisfies GetStaticPaths;
 
-const {id, title, summary, slug, blogpostImg, blogthumbImg, bannerImg, content, tags, createdAt, updatedAt, user, commentCount} = Astro.props;
+const {id, title, bannerImg, content, tags, createdAt, updatedAt, user} = Astro.props;
 ---
-<BlogPage {id} {title} {bannerImg} {content} {tags} {createdAt} {updatedAt} {user} />
+<MainLayout {title}>
+	<BlogPage {id} {title} {bannerImg} {content} {tags} {createdAt} {updatedAt} {user} errorMessage=''/>
+</MainLayout>
 
 <script src="@scripts/exploreCardFunc"></script>
 <script src="@scripts/commentSectionFunc"></script>

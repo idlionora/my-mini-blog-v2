@@ -9,8 +9,12 @@ interface BlogsKeyForExploreCards {
 	fetchingMessage: HTMLElement | null;
 }
 
-async function mapExploreCards(idArr:string[], cardContainer:HTMLElement | null) {
-    const res2 = await axios.get(
+async function mapExploreCards(
+	idArr: string[],
+	cardContainer: HTMLElement | null,
+	fetchingMessage: HTMLElement | null
+) {
+	const res2 = await axios.get(
 		`${import.meta.env.PUBLIC_APISITE}/blogposts/?fields=title,blogthumbImg,content,slug&_id=${idArr.join()}`
 	);
 	const cardsData = res2.data.data;
@@ -18,10 +22,10 @@ async function mapExploreCards(idArr:string[], cardContainer:HTMLElement | null)
 		return exploreCard({ cardData, index });
 	});
 	const parsedCards = new DOMParser().parseFromString(cardsInsert.join(''), 'text/html').body;
+	
+	fetchingMessage!.className = fetchingMessage!.className.replace('flex', 'hidden');
+	cardContainer!.innerHTML = parsedCards.innerHTML;
 
-    if (cardContainer) {
-        cardContainer.innerHTML = parsedCards.innerHTML;
-    }
 }
 
 async function fetchExploreCards({
@@ -52,12 +56,12 @@ async function fetchExploreCards({
 			fetchingMessage!.innerText = 'No related post available.';
 			return;
 		} else if (blogpostIds.length < 6) {
-			await mapExploreCards(blogpostIds, cardContainer);
+			await mapExploreCards(blogpostIds, cardContainer, fetchingMessage);
 			return;
 		}
 
 		const shuffledIds = shuffleArray<string>(blogpostIds);
-		await mapExploreCards(shuffledIds, cardContainer);
+		await mapExploreCards(shuffledIds, cardContainer, fetchingMessage);
 	} catch (err) {
 		console.log(err);
 		fetchingMessage!.innerText = 'Related post is unable to load';

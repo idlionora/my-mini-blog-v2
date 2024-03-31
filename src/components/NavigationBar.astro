@@ -47,7 +47,7 @@ const currentPath = Astro.url.pathname;
         </section>
     </div>
 </nav>
-<div id="nav-mobilemenu" class="absolute right-0 bg-neutral-01 h-dvh w-full max-w-40 flex-col gap-3 z-[17] pt-2 px-1 border-l border-violet-300 transition-all duration-300 ease-in-out hidden sm:hidden slide-right-full">
+<div id="nav-mobilemenu" class="absolute right-0 bg-neutral-01 min-h-dvh h-full w-full max-w-40 flex-col gap-3 z-[17] pt-16 px-1 border-l border-violet-300 transition-all duration-300 ease-in-out hidden sm:hidden slide-right-full">
     {currentPath.length > 1 && (
         <a href="/" class="button-mobilemenu">Home</a>
     )}
