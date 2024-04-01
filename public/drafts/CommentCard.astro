@@ -1,0 +1,38 @@
+<!-- ---
+const {commentId, commentUserName, commentUserPhoto, commentDate, commentContent, isLoggedIn} = Astro.props
+
+const commentDateOptions: Intl.DateTimeFormatOptions = {
+	weekday: 'short',
+	day: "numeric",
+	month: "long",
+	year: "numeric",
+	hour: "numeric",
+	minute: "numeric",
+	timeZone: 'Asia/Jakarta',
+	timeZoneName: 'short'
+}
+const dateDisplay = new Intl.DateTimeFormat('en-US', commentDateOptions).format(commentDate);
+---
+
+<div class="commentcard-main">
+    <div class="commentcard-bar">
+        <div class="flex items-center">
+            <div class="userimg-container userimg-md mr-2 ml-0.5">
+                <img src={`${import.meta.env.PUBLIC_IMG_HOST}${commentUserPhoto}`} alt={`${commentUserName.split(" ")[0]}'s photo'`} class="userimg-photo">
+            </div>
+            <div class="commentcard-bar-text">
+                <p>{commentUserName}</p>
+                <p class="card-text-sm">{dateDisplay}</p>
+            </div>
+        </div>
+    </div>
+    <div class="commentcard-textbox">
+        <div id="comment-content" class="commentcard-content">
+            {commentContent}
+        </div>
+        {isLoggedIn ? <div class="commentcard-button-box">
+            <button id={`button-edit-${commentId}`} class="button-comment button-comment-green">Edit</button>
+            <button id={`button-delete-${commentId}`} class="button-comment button-comment-red">Delete</button>
+        </div> : ""}
+    </div>
+</div> -->

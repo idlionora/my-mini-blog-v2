@@ -8,6 +8,7 @@ export default {
 				'neutral-01': '#d2daff',
 				'theme-blue': '#aac4ff',
 				'theme-purple': '#b1b2ff',
+				'theme-yellow': '#dbb632',
 				'button-green': '#b3ffae',
 				'button-red': '#ff7d7d',
 			},

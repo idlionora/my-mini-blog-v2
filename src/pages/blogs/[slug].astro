@@ -1,9 +1,40 @@
 ---
+import axios, { AxiosError } from 'axios';
 import MainLayout from "@layouts/MainLayout.astro"
+import BlogPage from "@components/BlogPage.astro"
+import ErrorPage from '@components/ErrorPage.astro';
+import "@styles/blogs.css"
 
-const {slug} = Astro.params;
+const { slug } = Astro.params;
+let blogResponse = {id:'', title:'', summary:'', slug:'', blogpostImg:'', blogthumbImg:'', bannerImg:'', content:'', tags:[''], createdAt:'', updatedAt:'', user: {_id:'', name:'', photo:''}, commentCount:0}
+let errorMessage = ''
+
+try {
+	const res = await axios.get(`${import.meta.env.PUBLIC_APISITE}/blogposts/?slug=${slug}`);
+    if (res.data.data.length > 0) {
+        blogResponse = res.data.data[0]
+    } else {
+        return Astro.redirect("/404")
+    }
+} catch (error) {
+    const err = error as AxiosError;
+    const errObj = {status: err.response?.status, desc: err.response?.data}
+    errorMessage = JSON.stringify(errObj);
+}
+
+const {id, title, bannerImg, content, tags, createdAt, updatedAt, user} = blogResponse
 ---
-
 <MainLayout title={slug}>
-	<h1>{slug}</h1>
+    {id.length > 0 ? <BlogPage {id} {title} {bannerImg} {content} {tags} {createdAt} {updatedAt} {user} errorMessage=''/> : <ErrorPage {errorMessage}/>}
 </MainLayout>
+
+<script>
+    const blogpostContent = document.getElementById('blogpost-content');
+
+    if (blogpostContent) {
+        const parsedContent = new DOMParser().parseFromString(blogpostContent.innerText, 'text/html').body;
+        blogpostContent.innerHTML = parsedContent.innerHTML
+    }
+</script>
+<script src="@scripts/exploreCardFunc"></script>
+<script src="@scripts/commentSectionFunc"></script>

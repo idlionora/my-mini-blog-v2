@@ -1,0 +1,17 @@
+---
+const {errorMessage} = Astro.props
+import "@styles/auth.css";
+
+const statusCode = JSON.parse(errorMessage).status;
+---
+
+<div class="absolute z-0 w-full h-dvh flex justify-center items-center text-center">
+    <main id="main-container" class="auth-container" data-errormessage=`${errorMessage}`>
+        <h2 class="px-1 font-heading text-2xl font-bold mb-4 text-violet-600 sm:text-[#1e40af]">
+            Request failed with status&nbsp;code {statusCode}            
+        </h2>
+        <p class="text-lg mb-3">
+			Sorry, there's a problem loading the content. Please try reloading the page, or contact support for help. 
+		</p>
+    </main>
+</div>

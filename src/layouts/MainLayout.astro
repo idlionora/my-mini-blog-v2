@@ -15,10 +15,10 @@ const {title = "My Mini Blog"} = Astro.props as Props;
 
 <html lang="en">
 	<MainHead {title}/>
-	<body class="bg-neutral-00 relative w-full min-h-dvh overflow-x-hidden">
+	<body class="bg-neutral-00 relative w-full min-h-dvh overflow-x-hidden flex flex-col">
 		<NavigationBar />
 		<slot/>
-		<script src="../scripts/navbar.js"></script>
+		<script src="../scripts/setNavbar.js"></script>
 	</body>
 </html>
 

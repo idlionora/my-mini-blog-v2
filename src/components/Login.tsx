@@ -22,6 +22,7 @@ const Login = () => {
 
 			setIsLoading(false);
 			setLoginStatus('');
+			window.location.replace('/')
 		} catch (error) {
 			const err = error as AxiosError;
 			setIsLoading(false);

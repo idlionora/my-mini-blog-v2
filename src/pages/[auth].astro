@@ -33,7 +33,7 @@ const { title } = Astro.props as Props;
             <h2 class="auth-title">
 				{ slug === "login" ? "Log in to myMiniBlog" : slug === "signup" ? "Create an account" : "Reset Your Password"}
 			</h2>
-            { slug === "login" && <><Login client:only="react"/><p class="mt-6">Need an account? <a href="/signup" class="text-link underline text-blue-700">Sign up</a></p><p>Forgot your account? <a href="/forgotpassword" class="text-link">Reset it</a></p></> }
+            { slug === "login" && <><Login client:only="react"/><p class="mt-6">Need an account? <a href="/signup" class="text-link">Sign up</a></p><p>Forgot your account? <a href="/forgotpassword" class="text-link">Reset it</a></p></> }
             { slug === "signup" && <><Signup client:only="react"/><p class="mt-6">Already have an account? <a href="/login" class="text-link">Log in</a></p></>}
             { slug === "forgotpassword" && <ForgotPassword client:only="react"/> }
         </main>

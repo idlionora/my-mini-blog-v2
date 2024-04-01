@@ -1,0 +1,25 @@
+---
+export const prerender = true;
+import MainLayout from "@layouts/MainLayout.astro"
+import BlogPage from "@components/BlogPage.astro"
+import type { GetStaticPaths, MarkdownInstance } from "astro";
+import "@styles/blogs.css"
+
+export const getStaticPaths =(async () => {
+	const allSavedPosts: MarkdownInstance<Record<string, any>>[] = await Astro.glob("@data/blogposts/*.md");
+	const frontmatters = allSavedPosts.map((blogpost) => blogpost.frontmatter);
+	
+	return frontmatters.map((blog) => { return {
+		params: {savedSlug: blog.slug},
+		props: blog
+	}})
+}) satisfies GetStaticPaths;
+
+const {id, title, bannerImg, content, tags, createdAt, updatedAt, user} = Astro.props;
+---
+<MainLayout {title}>
+	<BlogPage {id} {title} {bannerImg} {content} {tags} {createdAt} {updatedAt} {user} errorMessage=''/>
+</MainLayout>
+
+<script src="@scripts/exploreCardFunc"></script>
+<script src="@scripts/commentSectionFunc"></script>
