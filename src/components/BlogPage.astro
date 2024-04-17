@@ -25,12 +25,12 @@ updatedAt = new Intl.DateTimeFormat('en-US').format(updatedAt);
 		<section class="blogpost-grid-main px-4 sm:px-5 lg:pr-7">
 			<div class="flex w-full justify-between min-[400px]:justify-start mt-3 mb-2 md:px-3 md:mt-4 lg:px-4 gap-4 sm:gap-5">
 				<div class="flex items-center">
-					<div class="userimg-container userimg-sm mr-2 sm:mr-1">
+					<div class="userimg-container userimg-sm mr-2">
 						<img src={`${import.meta.env.PUBLIC_IMG_HOST}${userPhoto}`} alt={`${userName.split(" ")[0]}'s photo'`} class="userimg-photo">
 					</div>
-					<p>{userName}</p>
+					<a href={`/users/${userId}`} class="card-link text-blue-700">{userName}</a>
 				</div>
-				<div class="flex flex-col min-[350px]:flex-row items-center gap-x-4">
+				<div class="flex flex-col min-[350px]:flex-row items-center justify-center gap-x-4">
 					<div class="flex items-center">
 						<img src="/icons/calendar.svg" alt="Created at" class="h-4 w-fit mr-1 opacity-95">
 						<p class="min-[350px]:hidden">{createdAtShort}</p>
@@ -47,7 +47,7 @@ updatedAt = new Intl.DateTimeFormat('en-US').format(updatedAt);
 				</div>
 			</article>
 		</section>
-		<section class="blogpost-grid-comment w-full px-4 sm:px-5 flex flex-col items-center">
+		<section class="blogpost-grid-comment mt-2 w-full px-4 sm:px-5 flex flex-col items-center">
 			<div class="w-full max-w-2xl bg-theme-blue relative translate-x-[-3px] drop-shadow-[7px_7px_0_#4267b2] py-3 px-3.5">
 				<div class="flex items-center">
 					<div class="userimg-container userimg-md mr-2 ml-0.5">
@@ -63,17 +63,18 @@ updatedAt = new Intl.DateTimeFormat('en-US').format(updatedAt);
 					</div>
 				</form>
 			</div>
-			<div class="w-full max-w-2xl relative mt-12">
+			<div class="w-full max-w-2xl relative mt-6">
 				<h2 class="font-heading text-lg font-bold tracking-wider">Comments</h2>
 				<div class="w-full h-[0.2rem] bg-theme-purple mb-3"/>
-				<div id="pagination-container" class="absolute top-0 right-0 translate-y-[-1rem] pagination-container">
+				<p id="comment-fetch-message" class="text-center hidden">Comments are unable to load</p>
+				<div id="comment-container" class="w-full pt-2 flex flex-col gap-5">
+				</div>
+				<div id="pagination-container" class="pagination-container mx-auto mt-5">
 					<button type="button" id="pagination-arrow-left" class="button-pagination rounded-l">←</button>
 					<div id="pagination-number-container" class="flex items-center gap-x-[1px]">
 						<button class="button-pagination-selected">1</button>
 					</div>
 					<button id="pagination-arrow-right" class="button-pagination rounded-r" disabled={false}>→</button>
-				</div>
-				<div id="comment-container" class="w-full pt-2 flex flex-col gap-5">
 				</div>
 			</div>
 		</section>

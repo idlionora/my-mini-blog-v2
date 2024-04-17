@@ -24,7 +24,7 @@
     .blogpost-grid-container {
         grid-template-areas: 
             "main main sidebar"
-            "comment comment .";
+            "comment comment sidebar";
     }
 }
 
@@ -33,7 +33,7 @@
         grid-template-columns: 1fr 1fr 1fr 1fr;
         grid-template-areas:
             "main main main sidebar"
-            "comment comment comment .";
+            "comment comment comment sidebar";
     }
 }
 
@@ -118,6 +118,15 @@
         align-items: center;
         justify-content: space-between;
     }
+}
+
+.commentcard-link {
+    text-underline-offset: 4px;
+    text-decoration-line: underline;
+}
+
+.commentcard-link:hover, .commentcard-link:active {
+  color: #9333ea;
 }
 
 .card-text-sm {

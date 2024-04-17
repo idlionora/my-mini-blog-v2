@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import exploreCard, { type ExploreCardData } from '@scripts/exploreCard';
 import shuffleArray from '@scripts/shuffleArray';
 
@@ -62,9 +62,10 @@ async function fetchExploreCards({
 
 		const shuffledIds = shuffleArray<string>(blogpostIds);
 		await mapExploreCards(shuffledIds, cardContainer, fetchingMessage);
-	} catch (err) {
-		console.log(err);
-		fetchingMessage!.innerText = 'Related post is unable to load';
+	} catch (error) {
+		const err = error as AxiosError;
+		console.log(err.message);
+		fetchingMessage!.innerText = 'Related posts are unable to load';
 	}
 }
 

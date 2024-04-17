@@ -13,7 +13,7 @@ updatedAt: 2024-02-19T12:08:46.028Z
 user: {
     _id: '655c7a2bd2ffdd11ea492d1c',
     name: 'Barry T. Quokka',
-    photo: "/my-mini-blog/user/default.jpg"
+    photo: "/my-mini-blog/user/profile-655c7a2bd2ffdd11ea492d1c.jpg"
 }
 commentCount: 0
 ---

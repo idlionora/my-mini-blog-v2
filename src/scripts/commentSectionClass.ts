@@ -52,6 +52,12 @@ class CommentSection {
 		} catch (error) {
 			const err = error as AxiosError;
 			console.log(err.message);
+			this.paginationContainer.className = this.paginationContainer.className.replace(
+				'pagination-container',
+				'hidden'
+			);
+			const commentFetchMessage = document.getElementById('comment-fetch-message');
+			if (commentFetchMessage) commentFetchMessage.className = commentFetchMessage.className.replace('hidden', '')
 		}
 	}
 
@@ -101,6 +107,7 @@ class CommentSection {
 			const { _id, comment, createdAt, user } = commentData;
 			const cardData: CommentCardInput = {
 				commentId: _id,
+				commentUserId: user._id,
 				commentUserName: user.name,
 				commentUserPhoto: user.photo,
 				commentDate: createdAt,
@@ -118,11 +125,11 @@ class CommentSection {
 
 	async buildPagination(tabJump: number | 'persist' | 'last' = 1) {
 		await this.fetchComments();
-		if (typeof tabJump === "number") {
+		if (typeof tabJump === 'number') {
 			this.currentTab = tabJump;
 		} else if (tabJump === 'last' || this.currentTab > this.commentTabNum) {
 			this.currentTab = this.commentTabNum;
-		} 
+		}
 		this.displayPageNums();
 		this.assignDisabledButtons();
 		this.displayComments();
@@ -135,6 +142,5 @@ class CommentSection {
 		this.displayComments();
 	}
 }
-
 
 export default CommentSection;
