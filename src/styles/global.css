@@ -96,6 +96,47 @@ body {
 	font-weight: 400;
 }
 
+.page-main {
+	width: 100%;
+	padding: 0 1rem;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+@media (min-width: 640px) {
+    .page-main {
+		padding: 0 1.25rem;        
+    }
+}
+
+.page-title-h1 {
+	font-family: Oxygen, Helvetica, sans-serif;
+	font-weight: 700;
+	font-size: 1.25rem;
+	background-color: var(--color-theme-blue);
+	padding: 0.75rem 1rem;
+	text-align: center;
+	border-radius: 1rem;
+	color: white;
+	margin-top: 2.25rem;
+	margin-bottom: 1.75rem;
+}
+
+.page-title-h2 {
+	font-family: Oxygen, Helvetica, sans-serif;
+	font-weight: 700;
+	font-size: 1.125rem;
+	letter-spacing: 0.05em;
+}
+
+.page-line-purple {
+	width: 100%;
+	height: 0.2rem;
+	background-color: var(--color-theme-purple);
+	margin-bottom: 0.75rem;
+}
+
 .userimg-container {
 	background-color: white;
 	border-radius: 9999px;
@@ -104,6 +145,11 @@ body {
 	display: flex;
 	justify-content: center;
 	align-items: center;
+}
+
+.userimg-2xl {
+	width: 4.25rem;
+	height: 4.25rem;
 }
 
 .userimg-md {
@@ -119,6 +165,11 @@ body {
 .userimg-photo {
 	object-fit: cover;
 	object-position: center;
+}
+
+.userimg-2xl > .userimg-photo {
+	width: 4.5rem;
+	height: 4.5rem;
 }
 
 .userimg-md > .userimg-photo {
@@ -140,20 +191,6 @@ body {
 	color: #9333ea; /*text-purple-600*/
 }
 
-/* .button-dropdown {
-	background-color: white;
-	border: 1px solid rgb(209, 213, 219);
-	border-radius: 0.25rem;
-	font-size: 1rem;
-	font-weight: 400;
-	line-height: 1.25rem;
-	height: 2.75rem;
-	padding: 8px 12px;
-	display: flex;
-	align-items: center;
-	gap: 0.5rem;
-} */
-
 .pagination-container {
 	width: fit-content;
 	display: flex;
@@ -165,6 +202,30 @@ body {
 	overflow: hidden;
 	background-color: #e2e8f0;
 	gap: 1px;
+}
+
+.button-proceed {
+	display: flex;
+	align-items: center;
+	background-color: var(--color-theme-blue);
+	padding: 0.5rem 0.625rem;
+	border-radius: 0.375rem;
+	color: white;
+}
+
+.button-proceed:hover, .button-proceed:active {
+	background-color: #fef08a;
+	color: #451a03;
+}
+
+.button-arrow-white {
+    width: 0.75rem;
+    margin-left: 0.375rem;
+	filter: invert(100%);
+}
+
+.button-proceed:hover > .button-arrow-white, .button-proceed:active > .button-arrow-white {
+	filter: invert(10%) sepia(71%) saturate(1858%) hue-rotate(3deg) brightness(94%) contrast(98%);
 }
 
 .button-pagination, .button-pagination-dots {

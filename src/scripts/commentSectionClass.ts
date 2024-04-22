@@ -96,6 +96,10 @@ class CommentSection {
 		} else {
 			this.paginationContainer.children[2].removeAttribute('disabled');
 		}
+
+		if (this.fetchedComments.length < 1) {
+			this.paginationContainer.children[2].setAttribute('disabled', '');
+		}
 	}
 
 	displayComments() {

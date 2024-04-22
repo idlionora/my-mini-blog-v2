@@ -310,7 +310,7 @@ async function deleteComment(commentId: string, token: string) {
 function addCommentButtonListeners() {
 	// registerButtonBoxes();
 	// this function is applied only after registerButtonListeners is called 
-	//So, the commentButtonBoxes are already updated
+	// So, the commentButtonBoxes are already updated
 	commentButtonBoxes.forEach((buttonBox) => {
 		const commentIndex = buttonBox.dataset.commentindex || '';
 

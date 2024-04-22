@@ -46,16 +46,34 @@
     margin-bottom: 1rem;
 }
 
-.auth-input:focus {
-    outline-color: #1e40af;
+.profile-label {
+    display: block;
+    font-family: Oxygen, Helvetica, sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: #1e40af; /*text-blue-800*/
 }
 
-.auth-input.fail {
+.profile-input {
+    width: 100%;
+    border-radius: 0.5rem;
+    border: 1px solid var(--color-theme-blue);
+    background-color: white;
+    height: 2.5rem;
+    padding: 0 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.auth-input:focus, .profile-input:focus {
+    outline-color: #1e40af; /*text-blue-800*/
+}
+
+.auth-input.fail, .profile-input.fail {
     border-width: 2px;
     border-color: #fb7185;
 }
 
-.auth-input.fail:focus {
+.auth-input.fail:focus, .profile-input.fail:focus {
     outline-color: #f43f5e;
 }
 
@@ -102,4 +120,12 @@
     color: white;    
     filter: drop-shadow(2px 2px 0 #4267b2);
     transform: translateX(-0px);
+}
+
+.filter-blue-800 {
+    filter: invert(18%) sepia(70%) saturate(3215%) hue-rotate(223deg) brightness(87%) contrast(94%);
+}
+
+.filter-theme-blue {
+    filter: invert(81%) sepia(22%) saturate(4590%) hue-rotate(190deg) brightness(102%) contrast(122%);
 }

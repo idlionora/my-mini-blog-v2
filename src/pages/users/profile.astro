@@ -1,7 +1,64 @@
 ---
 import MainLayout from "@layouts/MainLayout.astro"
+import "@styles/form.css";
 ---
 
 <MainLayout title="Your Profile">
-	<h1>Here is the user's profile!</h1>
+	<main class="page-main sm:mb-28">
+		<h1 id="profile-header" class="page-title-h1 w-full max-w-[15rem]">My Profile</h1>
+		<div class="sm:bg-white sm:px-4 sm:py-5 w-full max-w-lg rounded-lg sm:border border-gray-200">
+			<h2 class="page-title-h2">Account Info</h2>
+			<div class="page-line-purple"/>
+			<form class="mt-4">
+				<label for="name" class="profile-label">Name</label>
+				<input type="text" id="name" name="name" class="profile-input" placeholder="John Doe" required />
+				<label for="email" class="profile-label">Email</label>
+				<input type="email" id="email" name="email" class="profile-input" placeholder="johndoe@email.com" required>
+				<div class="flex items-center gap-3">
+					<div class="userimg-container userimg-2xl border border-theme-blue">
+						<img id="photo-preview" src="/images/noun-user-1256674-profile.jpg" alt="photo preview" class="userimg-photo">
+					</div>
+					<button id="button-photo" type="button" class="text-link">Choose new photo</button>
+					<input type="file" name="photo" id="photo" accept="image/png, image/gif, image/jpeg" hidden/>					
+				</div>
+				<button id="button-account" type="button" class="button-proceed ml-auto justify-center w-full max-w-36 font-heading mb-3">Save Info</button>
+			</form>
+			<h2 class="page-title-h2">Password</h2>
+			<div class="page-line-purple"/>
+			<form class="mt-4">
+				<label for="passcurrent" class="profile-label">Current Password</label>
+				<div class="w-full flex items-center relative">
+					<input type="password" id="passcurrent" name="passcurrent" class="profile-input" placeholder="********" minlength="8" required/>
+					<button id="button-passcurrent-reveal" type="button" class="absolute right-3 mb-4 filter-theme-blue">
+						<img src="/icons/eye.svg" alt="reveal password" class="w-5"/>
+					</button>
+					<button id="button-passcurrent-hide" type="button" class="absolute right-3 mb-4 filter-theme-blue hidden">
+						<img src="/icons/eye-off.svg" alt="hide password" class="w-5"/>
+					</button>
+				</div>
+				<label for="passnew" class="profile-label">New Password</label>
+				<div class="w-full flex items-center relative">
+					<input type="password" id="passnew" name="passnew" class="profile-input" placeholder="********" minlength="8" required/>
+					<button id="button-passnew-reveal" type="button" class="absolute right-3 mb-4 filter-theme-blue">
+						<img src="/icons/eye.svg" alt="reveal new password" class="w-5"/>
+					</button>
+					<button id="button-passnew-hide" type="button" class="absolute right-3 mb-4 filter-theme-blue hidden">
+						<img src="/icons/eye-off.svg" alt="hide new password" class="w-5"/>
+					</button>
+				</div>
+				<label for="passconfirm" class="profile-label">Password Confirm</label>
+				<div class="w-full flex items-center relative">
+					<input type="password" id="passconfirm" name="passconfirm" class="profile-input" placeholder="********" minlength="8" required/>
+					<button id="button-passconfirm-reveal" type="button" class="absolute right-3 mb-4 filter-theme-blue">
+						<img src="/icons/eye.svg" alt="reveal password confirm" class="w-5"/>
+					</button>
+					<button id="button-passconfirm-hide" type="button" class="absolute right-3 mb-4 filter-theme-blue hidden">
+						<img src="/icons/eye-off.svg" alt="hide password confirm" class="w-5"/>
+					</button>
+					
+				</div>
+				<button id="button-password" type="button" class="button-proceed ml-auto justify-center w-full max-w-36 font-heading mb-3">Save Password</button>
+			</form>
+		</div>
+	</main>
 </MainLayout>

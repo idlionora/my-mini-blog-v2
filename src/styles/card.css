@@ -6,7 +6,7 @@
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    border: 1px solid #e5e7eb;
+    border: 1px solid #e5e7eb; /*border-gray-200*/
 }
 
 .card-pic-container {
@@ -86,29 +86,4 @@
 
 .card-mr-2 {
     margin-right: 0.5rem;
-}
-
-.card-readpost {
-	display: flex;
-	width: fit-content;
-	align-items: center;
-	background-color: var(--color-theme-blue);
-	padding: 0.5rem 0.625rem;
-	border-radius: 0.375rem;
-	color: white;
-}
-
-.card-readpost:hover, .card-readpost:active {
-	background-color: #fef08a;
-	color: #451a03;
-}
-
-.card-arrow {
-    width: 0.75rem;
-    margin-left: 0.375rem;
-	filter: invert(100%);
-}
-
-.card-readpost:hover > .card-arrow, .card-readpost:active > .card-arrow {
-	filter: invert(10%) sepia(71%) saturate(1858%) hue-rotate(3deg) brightness(94%) contrast(98%);
 }
